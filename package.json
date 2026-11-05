@@ -1,0 +1,22 @@
+{
+  "name": "aether-digital-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive Web Configurators, B2B Portal and WordPress Architecture",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run -ws --if-present build",
+    "test:verify": "npm run -w @aether/core-engine test:verify",
+    "typecheck": "npm run -ws --if-present typecheck",
+    "dev:aura": "npm run -w @aether/aurabuild dev",
+    "dev:volt": "npm run -w @aether/voltswitch dev",
+    "dev:chronos": "npm run -w @aether/chronosflow dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}

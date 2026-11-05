@@ -1,0 +1,23 @@
+# Dependencies and Build Artifacts
+node_modules/
+dist/
+build/
+.vercel/
+*.log
+.env
+.env.*
+!.env.example
+
+# Development and Local Tools
+.agents/
+.claude/
+skills-lock.json
+
+# Internal Workflow and Orchestration Context (Strictly Local)
+.clinerules
+GLOBAL_RULES.md
+PRD.md
+ARCHITECTURE.md
+DESIGN.md
+ACTIVE_CONTEXT.md
+LESSON_LEARNED.md
