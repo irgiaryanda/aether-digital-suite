@@ -1,0 +1,68 @@
+{
+  "key": "group_aura_configurator",
+  "title": "AuraBuild Architectural Configurator Specifications",
+  "fields": [
+    {
+      "key": "field_aura_product_type",
+      "label": "Product Type",
+      "name": "_aura_product_type",
+      "type": "select",
+      "choices": {
+        "GARAGE_DOOR": "Architectural Sectional Garage Door",
+        "LUXURY_POOL": "Cantilevered Luxury Concrete Pool"
+      },
+      "default_value": "GARAGE_DOOR",
+      "required": 1
+    },
+    {
+      "key": "field_aura_postcode",
+      "label": "Site Postcode",
+      "name": "_aura_postcode",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "key": "field_aura_engineering",
+      "label": "Engineering Calculations JSON",
+      "name": "_aura_engineering",
+      "type": "textarea",
+      "instructions": "Serialized AS/NZS 4505 or Hydraulic calculations"
+    },
+    {
+      "key": "field_aura_bom",
+      "label": "Bill of Materials JSON",
+      "name": "_aura_bom",
+      "type": "textarea"
+    },
+    {
+      "key": "field_aura_total_aud",
+      "label": "Total Inc GST (AUD)",
+      "name": "_aura_total_aud",
+      "type": "number",
+      "prepend": "$"
+    },
+    {
+      "key": "field_aura_status",
+      "label": "Quote Status",
+      "name": "_aura_status",
+      "type": "select",
+      "choices": {
+        "PENDING_SITE_MEASURE": "Pending Site Measure",
+        "SCHEDULED": "Scheduled",
+        "APPROVED": "Approved",
+        "PROCESSED": "Processed"
+      },
+      "default_value": "PENDING_SITE_MEASURE"
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "aura_quote"
+      }
+    ]
+  ],
+  "active": true
+}

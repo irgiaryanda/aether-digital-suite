@@ -1,0 +1,17 @@
+{
+  "name": "@aether/core-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deterministic domain math, validation engines, and shared persistence for AetherDigital Suite",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test:verify": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}

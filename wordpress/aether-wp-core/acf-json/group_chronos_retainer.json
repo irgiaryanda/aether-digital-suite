@@ -1,0 +1,39 @@
+{
+  "key": "group_chronos_retainer",
+  "title": "ChronosFlow Agency Retainer & Budget Allocation",
+  "fields": [
+    {
+      "key": "field_chronos_client_code",
+      "label": "Client Code",
+      "name": "_chronos_client_code",
+      "type": "text",
+      "required": 1
+    },
+    {
+      "key": "field_chronos_budget_hours",
+      "label": "Retainer Budget Hours",
+      "name": "_chronos_budget_hours",
+      "type": "number",
+      "default_value": 40,
+      "required": 1
+    },
+    {
+      "key": "field_chronos_hourly_rate_aud",
+      "label": "Hourly Rate (AUD)",
+      "name": "_chronos_hourly_rate_aud",
+      "type": "number",
+      "prepend": "$",
+      "default_value": 185
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "chronos_project"
+      }
+    ]
+  ],
+  "active": true
+}

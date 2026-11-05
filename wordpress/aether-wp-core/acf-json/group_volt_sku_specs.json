@@ -1,0 +1,37 @@
+{
+  "key": "group_volt_sku_specs",
+  "title": "VoltSwitch Trade Loyalty & Reward Specifications",
+  "fields": [
+    {
+      "key": "field_volt_points_cost",
+      "label": "Points Cost",
+      "name": "_volt_points_cost",
+      "type": "number",
+      "required": 1
+    },
+    {
+      "key": "field_volt_aud_value",
+      "label": "AUD Equivalent Value",
+      "name": "_volt_aud_value",
+      "type": "number",
+      "prepend": "$"
+    },
+    {
+      "key": "field_volt_stock_level",
+      "label": "Warehouse Stock Level",
+      "name": "_volt_stock_level",
+      "type": "number",
+      "default_value": 10
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "volt_reward_item"
+      }
+    ]
+  ],
+  "active": true
+}
