@@ -243,10 +243,3 @@ Each application directory includes its own `vercel.json` routing configuration 
 | WooCommerce HPOS Compatibility | WP Core | Fully Compliant (Custom Order Tables) |
 
 ---
-
-## 7. Author and Portfolio Context
-- Developer: Irgi Aryanda
-- Repository: [https://github.com/irgiaryanda/aether-digital-suite.git](https://github.com/irgiaryanda/aether-digital-suite.git)
-- Primary Branch: `main`
-- Monorepo Suite: AetherDigital Monorepo
-
