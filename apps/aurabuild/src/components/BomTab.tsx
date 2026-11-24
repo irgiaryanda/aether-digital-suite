@@ -1,6 +1,6 @@
 import React from "react";
 import { BillOfMaterials } from "@aether/core-engine";
-import { FileText, CheckCircle } from "@phosphor-icons/react";
+import { FileText, CheckCircle, Printer } from "@phosphor-icons/react";
 
 interface BomTabProps {
   bom: BillOfMaterials;
@@ -10,7 +10,6 @@ interface BomTabProps {
 export const BomTab: React.FC<BomTabProps> = ({ bom, onOpenQuoteWizard }) => {
   return (
     <div className="space-y-4">
-      {/* Reference & Header */}
       <div className="flex items-center justify-between pb-2 border-b border-aura-border">
         <div>
           <span className="text-[10px] uppercase font-bold text-aura-text-dim block">
@@ -24,7 +23,6 @@ export const BomTab: React.FC<BomTabProps> = ({ bom, onOpenQuoteWizard }) => {
         </span>
       </div>
 
-      {/* Itemized Line Items Table */}
       <div className="bg-white rounded-lg border border-aura-border overflow-hidden">
         <div className="max-h-60 overflow-y-auto divide-y divide-aura-border/60">
           {bom.items.map((item, index) => (
@@ -50,7 +48,6 @@ export const BomTab: React.FC<BomTabProps> = ({ bom, onOpenQuoteWizard }) => {
           ))}
         </div>
 
-        {/* Financial Summary */}
         <div className="bg-aura-subtle p-3 border-t border-aura-border space-y-1.5 text-xs font-mono">
           <div className="flex justify-between text-aura-text-muted">
             <span>Subtotal (ex-GST):</span>
@@ -73,15 +70,25 @@ export const BomTab: React.FC<BomTabProps> = ({ bom, onOpenQuoteWizard }) => {
         </div>
       </div>
 
-      {/* Book Measure Action */}
-      <button
-        type="button"
-        onClick={onOpenQuoteWizard}
-        className="w-full py-2.5 px-4 rounded-lg bg-aura-cyan text-white hover:bg-[#0c627a] font-semibold text-xs tracking-wide shadow-sm transition-all flex items-center justify-center space-x-2"
-      >
-        <FileText size={16} weight="bold" />
-        <span>Book Site Measure & Lock Price</span>
-      </button>
+      <div className="grid grid-cols-3 gap-2">
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="col-span-1 py-2.5 px-3 rounded-lg bg-white border border-aura-border text-aura-text hover:border-aura-cyan hover:text-aura-cyan font-semibold text-xs flex items-center justify-center space-x-1.5"
+        >
+          <Printer size={15} weight="bold" />
+          <span>Print</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={onOpenQuoteWizard}
+          className="col-span-2 py-2.5 px-4 rounded-lg bg-aura-cyan text-white hover:bg-[#0c627a] font-semibold text-xs tracking-wide shadow-sm transition-all flex items-center justify-center space-x-2"
+        >
+          <FileText size={16} weight="bold" />
+          <span>Book Site Measure</span>
+        </button>
+      </div>
     </div>
   );
 };

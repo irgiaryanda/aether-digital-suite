@@ -13,6 +13,7 @@ interface Props {
   setSiteAddress: (v: string) => void;
   postcode: string;
   setPostcode: (v: string) => void;
+  errors?: Record<string, string>;
 }
 
 export const QuoteStepOne: React.FC<Props> = ({
@@ -26,6 +27,7 @@ export const QuoteStepOne: React.FC<Props> = ({
   setSiteAddress,
   postcode,
   setPostcode,
+  errors = {},
 }) => {
   const resolution = resolvePostcode(postcode);
 
@@ -38,8 +40,9 @@ export const QuoteStepOne: React.FC<Props> = ({
             type="text"
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
-            className="w-full px-3 py-1.5 border border-aura-border rounded-lg text-xs"
+            className={`w-full px-3 py-2 border rounded-lg text-xs ${errors["customerName"] ? "border-red-500 bg-red-50/40" : "border-aura-border"}`}
           />
+          {errors["customerName"] && <span className="text-[11px] text-red-600 mt-0.5 block">{errors["customerName"]}</span>}
         </div>
         <div>
           <label className="font-semibold text-aura-text block mb-1">Phone Number</label>
@@ -47,8 +50,9 @@ export const QuoteStepOne: React.FC<Props> = ({
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-3 py-1.5 border border-aura-border rounded-lg text-xs font-mono"
+            className={`w-full px-3 py-2 border rounded-lg text-xs font-mono ${errors["phone"] ? "border-red-500 bg-red-50/40" : "border-aura-border"}`}
           />
+          {errors["phone"] && <span className="text-[11px] text-red-600 mt-0.5 block">{errors["phone"]}</span>}
         </div>
       </div>
 
@@ -58,8 +62,9 @@ export const QuoteStepOne: React.FC<Props> = ({
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-3 py-1.5 border border-aura-border rounded-lg text-xs"
+          className={`w-full px-3 py-2 border rounded-lg text-xs ${errors["email"] ? "border-red-500 bg-red-50/40" : "border-aura-border"}`}
         />
+        {errors["email"] && <span className="text-[11px] text-red-600 mt-0.5 block">{errors["email"]}</span>}
       </div>
 
       <div className="grid grid-cols-3 gap-3">
@@ -69,8 +74,9 @@ export const QuoteStepOne: React.FC<Props> = ({
             type="text"
             value={siteAddress}
             onChange={(e) => setSiteAddress(e.target.value)}
-            className="w-full px-3 py-1.5 border border-aura-border rounded-lg text-xs"
+            className={`w-full px-3 py-2 border rounded-lg text-xs ${errors["siteAddress"] ? "border-red-500 bg-red-50/40" : "border-aura-border"}`}
           />
+          {errors["siteAddress"] && <span className="text-[11px] text-red-600 mt-0.5 block">{errors["siteAddress"]}</span>}
         </div>
         <div>
           <label className="font-semibold text-aura-text block mb-1">Postcode</label>
@@ -79,8 +85,9 @@ export const QuoteStepOne: React.FC<Props> = ({
             value={postcode}
             maxLength={4}
             onChange={(e) => setPostcode(e.target.value.replace(/\D/g, "").slice(0, 4))}
-            className="w-full px-3 py-1.5 border border-aura-border rounded-lg text-xs font-mono font-bold"
+            className={`w-full px-3 py-2 border rounded-lg text-xs font-mono font-bold ${errors["postcode"] ? "border-red-500 bg-red-50/40" : "border-aura-border"}`}
           />
+          {errors["postcode"] && <span className="text-[11px] text-red-600 mt-0.5 block">{errors["postcode"]}</span>}
         </div>
       </div>
 

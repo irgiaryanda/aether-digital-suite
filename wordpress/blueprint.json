@@ -1,0 +1,32 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/edit.php?post_type=aura_quote",
+  "preferredVersions": {
+    "php": "8.2",
+    "wp": "latest"
+  },
+  "features": {
+    "networking": true
+  },
+  "steps": [
+    {
+      "step": "login",
+      "username": "admin",
+      "password": "password"
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "https://github.com/irgiaryanda/aether-digital-suite/archive/refs/heads/main.zip"
+      },
+      "options": {
+        "activate": false
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require_once 'wordpress/wp-load.php'; $pages = [ ['title' => 'AuraBuild Configurator', 'slug' => 'aurabuild', 'content' => '[aether_aurabuild]'], ['title' => 'VoltSwitch B2B Portal', 'slug' => 'voltswitch', 'content' => '[aether_voltswitch]'], ['title' => 'ChronosFlow Agency Ops', 'slug' => 'chronosflow', 'content' => '[aether_chronosflow]'] ]; foreach ($pages as $p) { if (!get_page_by_path($p['slug'])) { wp_insert_post(['post_type' => 'page', 'post_title' => $p['title'], 'post_name' => $p['slug'], 'post_content' => $p['content'], 'post_status' => 'publish']); } } ?>"
+    }
+  ]
+}

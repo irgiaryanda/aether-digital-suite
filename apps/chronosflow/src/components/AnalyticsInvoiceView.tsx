@@ -7,6 +7,7 @@ import {
   generateAgencyTaxInvoice,
 } from "@aether/core-engine";
 import { TaxInvoicePreview } from "./TaxInvoicePreview";
+import { UtilizationChart } from "./UtilizationChart";
 import { ChartBar, CurrencyDollar, TrendUp, Users } from "@phosphor-icons/react";
 
 interface Props {
@@ -22,7 +23,7 @@ export const AnalyticsInvoiceView: React.FC<Props> = ({
 }) => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(projects[0]?.id ?? "");
 
-  const totalCapacityHours = 120; // 3 full-time engineers (40h each)
+  const totalCapacityHours = 120;
   const utilization = useMemo(() => {
     return calculateAgencyUtilization(timesheets, totalCapacityHours);
   }, [timesheets, totalCapacityHours]);
@@ -53,7 +54,7 @@ export const AnalyticsInvoiceView: React.FC<Props> = ({
   return (
     <div className="space-y-6 font-mono text-xs">
       {/* Utilization Metrics KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 print:hidden">
         <div className="p-4 bg-chronos-surface border border-white/10 rounded-xl space-y-1 shadow-lg">
           <div className="flex items-center space-x-1 text-gray-400 text-[10px] uppercase">
             <TrendUp size={14} className="text-chronos-green" weight="bold" />
@@ -100,14 +101,17 @@ export const AnalyticsInvoiceView: React.FC<Props> = ({
         </div>
       </div>
 
+      <UtilizationChart projects={projects} timesheets={timesheets} />
+
       {/* Invoice Generator Target Selector */}
-      <div className="bg-chronos-surface border border-white/10 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-chronos-surface border border-white/10 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div>
           <span className="text-[10px] text-gray-400 uppercase block">Active Invoice Project Target</span>
-          <h3 className="font-bold text-white text-sm">Select Client Retainer for Invoicing</h3>
+          <h3 className="font-bold text-white text-sm font-sans">Select Client Retainer for Invoicing</h3>
         </div>
 
         <select
+          aria-label="Select Client Project for Tax Invoice"
           value={selectedProjectId}
           onChange={(e) => setSelectedProjectId(e.target.value)}
           className="px-3 py-1.5 bg-chronos-canvas border border-white/10 rounded text-white text-xs"
@@ -120,7 +124,6 @@ export const AnalyticsInvoiceView: React.FC<Props> = ({
         </select>
       </div>
 
-      {/* Live Tax Invoice Preview */}
       <TaxInvoicePreview invoice={generatedInvoice} />
     </div>
   );

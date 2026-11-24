@@ -28,9 +28,12 @@ aether-digital-suite/
 │   ├── voltswitch/             Port 5174: B2B Commercial Trade Loyalty & SKU Engine
 │   └── chronosflow/            Port 5175: Digital Agency Time & Retainer Intelligence
 ├── packages/
-│   └── core-engine/            Shared TypeScript Math, Domain Models & Vitest Suite
+│   └── core-engine/            Shared TypeScript Math, REST Client & Vitest Suite
 └── wordpress/
-    └── aether-wp-core/         PHP 8.2 WordPress Custom Plugin & Headless Bridge
+    ├── aether-wp-core/         PHP 8.2 WordPress Custom Plugin, Roles, Admin & REST Controllers
+    ├── aether-digital-theme/   Standalone Custom WordPress Block/Hybrid Theme
+    ├── blueprint.json          WordPress Playground Blueprint
+    └── tests/                  PHP 8.2/8.3 Runtime Integration Suite
 ```
 
 ### Dependency Architecture
@@ -62,10 +65,10 @@ Architectural Sectional Garage Doors & Luxury Infinity Pools Interactive Studio.
 Key Capabilities:
 - Parametric SVG Visualizer:
   - Dual product line toggle: Architectural Sectional Garage Doors and Cantilevered Luxury Concrete Pools.
-  - Sectional garage doors: Real-time rendering reacting to dimensional adjustments (2400mm to 6000mm width, 1950mm to 3200mm height, 4 to 6 panels), Colorbond steel finishes (Monument, Surfmist, Basalt, Woodland Grey, Western Red Cedar woodgrain shader), glazed window inserts, and operational night-mode exterior lighting cones.
-  - Cantilevered pools: Perspective architectural basin rendering with drop-edge horizon shadow, waterline mosaic tiles, coping stone finishes (Travertine, Flamed Granite, Honed Bluestone, Coastal Limestone), and underwater LED luminaires.
+  - Sectional garage doors: Real-time proportional SVG scaling reacting to millimeter width and height adjustments, 4 architectural profiles including Vertical Batten and Hamptons Coffered, Colorbond steel and Western Red Cedar cladding, animated open and close door motion, and structural AS/NZS 4505 X-Ray overlay.
+  - Cantilevered pools: Dynamic isometric basin scaling driven by length, width, and depth inputs, water palette linked to interior finishes, water caustic shimmer, underwater LED luminaires, and AS 1926 hydraulic overlay.
 - Deterministic Structural Engineering Engine:
-  - Postcode resolver mapping Australian postcodes across NSW, VIC, QLD, WA, SA, and TAS to AS/NZS 4505:2012 Wind Regions (A, B, C, D).
+  - Postcode resolver mapping Australian postcodes across NSW, VIC, QLD, WA, SA, TAS, ACT, and NT to AS/NZS 4505:2012 Wind Regions A, B, C, and D.
   - Calculates Ultimate Limit State (ULS) and Serviceability Limit State (SLS) design wind pressures in kPa, total door panel mass in kg, J-strut reinforcements, wind-lock track engagement clips, cyclonic roller hinges, and motor torque in Nm.
   - Calculates pool water volume in Liters, 6-hour turnover flow rate in L/min, variable-speed pump sizing in kW, glass media mass in kg, and chlorinator output in g/hr.
 - Itemized Bill of Materials & Pricing:
@@ -83,18 +86,18 @@ Key Capabilities:
   - 26+ commercial electrical and lighting products across Clipsal, Philips, Osram, Pierlite, and Thorn mapped to Aether equivalents across Highbays, Battens, Troffers, Floodlights, Downlights, and Emergency Exit luminaires.
   - Side-by-side engineering telemetry comparison cards displaying Wattage, Delivered Lumens, Luminous Efficacy (lm/W), IP/IK Ingress and Impact Protection ratings, CRI, L70 lifespan hours, and AS/NZS 60598 compliance.
 - Commercial Retrofit ROI & Carbon Payback Calculator:
-  - Interactive inputs for fitting quantity, daily hours, annual operating days, and electricity tariff ($/kWh AUD).
-  - Dynamically calculates Annual kWh Saved, Annual AUD Financial Savings, Carbon Reduction in metric tonnes of CO2-e (using National Greenhouse Accounts factor 0.79 kg CO2-e/kWh), Capital Equipment Outlay, Net Payback Period in months, 5-Year Cumulative Net Savings, and one-click Tender Schedule CSV export.
+  - Interactive inputs for fitting quantity, daily hours, annual operating days, and electricity tariff in AUD per kWh.
+  - Dynamically calculates Annual kWh Saved, Annual AUD Financial Savings, Carbon Reduction in metric tonnes of CO2-e using National Greenhouse Accounts factor 0.79 kg CO2-e/kWh, Capital Equipment Outlay, Net Payback Period in months, 5-Year Cumulative Net Savings SVG bar chart, and one-click Tender Schedule CSV export.
 - Wholesaler Tax Invoice Claim Engine:
   - Wholesaler selector supporting Rexel, Lawrence & Hanson, Haymans, and Middy's Electrical.
-  - Official Australian Taxation Office Modulus 89 11-digit ABN mathematical checksum validator.
-  - Duplicate invoice number prevention and tier points multiplier preview (Bronze 1.0x, Silver 1.25x, Gold 1.5x, Platinum 2.0x). Submitting atomically credits contractor point balance.
+  - Drag-and-drop receipt upload dropzone with image/PDF preview and simulated OCR scan alongside official Australian Taxation Office Modulus 89 11-digit ABN checksum validation.
+  - Duplicate invoice number prevention, visual spend progress bar toward Platinum 2.0x tier, and automatic tier resolution.
 - Double-Entry Points Ledger:
-  - Immutable audit trail recording timestamped CREDIT (invoice claims) and DEBIT (reward redemptions) transactions with running balances.
+  - Immutable audit trail recording timestamped CREDIT and DEBIT transactions with running balances.
 - WooCommerce Trade Rewards Store:
-  - Interactive catalog of 8 trade rewards (Fluke Multimeter, Milwaukee M18 Fuel Combo, Wiha VDE Set, Knipex Pliers, $250/$500 Wholesaler Trade Vouchers). Deducts points atomically and generates verifiable redemption voucher codes.
+  - Interactive catalog of 8 trade rewards including Fluke, Milwaukee, Wiha, Knipex tools and $250/$500 Wholesaler Trade Vouchers, deducting points atomically with generated redemption voucher codes.
 - High-Density B2B Trade Matrix:
-  - Multi-facet category filtering across all 26+ products with live warehouse stock levels (Sydney, Melbourne, Brisbane), tender quantity selector, and one-click Bill of Quantities CSV export.
+  - Multi-facet category, IP rating, color temperature, and warehouse stock filtering across all 26+ products for Sydney, Melbourne, and Brisbane depots with tender quantity selection and Bill of Quantities CSV export.
 - WooCommerce HPOS & WP Database Inspector Drawer:
   - Displays live REST payload for `/wp-json/aether/v1/volt-claims`, PHP 8.2 controller source code, `$wpdb` SQL schema, and WooCommerce `woocommerce_order_status_completed` HPOS hook integration.
 
@@ -107,16 +110,12 @@ Key Capabilities:
   - Digital timecode counter (HH:MM:SS) combining real-time tick intervals with monotonic delta calculations (`elapsed = accumulated + (now - startedAtMs)`), ensuring timers remain accurate across browser refreshes and tab backgrounding.
   - Project selector, Phase category selector (Discovery & UX, Custom WP Theme, WooCommerce Plugin, QA & Staging, Deployment), and Billable toggle switch.
   - Stopping or logging sessions atomically creates timesheet entries, updates project consumed hours, and recalculates retainer burn status.
-- Interactive Workflow Kanban & Retainer Burn Monitor:
-  - Client retainer health monitor displaying allocated budget hours vs logged hours, burn percentage, and status indicators: Healthy (<80%), Warning (80% to 100%), and Over-Burn (>100%).
-  - 5-stage pipeline board: Backlog, UI/UX Design, WP & PHP Development, Staging Review, and Live Production.
-  - Task cards with estimated vs logged hours, stage transition buttons, and one-click timer tracking.
-- Agency Timesheet Ledger & Quick-Log:
-  - Grouped ledger displaying staff member, project, phase, billable classification, formatted duration, AUD hourly rate, and line totals in AUD.
-  - Includes a manual quick-log form to record completed work directly into any client project.
-- Utilization Analytics & Australian Tax Invoice Generator:
-  - Computes Billable Hours, Non-Billable Hours, Agency Billable Utilization %, and Effective Hourly Rate in AUD.
-  - Dynamic Australian Tax Invoice generator with Agency ABN, Client Billing Details, itemized phase breakdown, Subtotal ex-GST, 10% Australian GST, Total Payable AUD inc-GST, and one-click CSV export and print view.
+- **Interactive Workflow Kanban & Retainer Burn Monitor**:
+  - Client retainer health monitor displaying allocated budget hours vs logged hours, burn percentage, and status indicators: Healthy below 80%, Warning 80% to 100%, and Over-Burn above 100%.
+  - 5-stage HTML5 drag-and-drop pipeline board: Backlog, UI/UX Design, WP & PHP Development, Staging Review, and Live Production, synchronizing logged session hours across projects and Kanban task cards.
+- **Utilization Analytics & Australian Tax Invoice Generator**:
+  - Computes Billable Hours, Non-Billable Hours, Agency Billable Utilization %, Effective Hourly Rate in AUD, SVG Retainer Burn and Phase Revenue charts.
+  - Dynamic Australian Tax Invoice generator with Agency ABN, Client Billing Details, itemized phase breakdown, Subtotal ex-GST, 10% Australian GST, Total Payable AUD inc-GST, one-click CSV export, and clean black-on-white `@media print` A4 output.
 - WP Agency Portal & Role Capability Inspector Drawer:
   - Live REST payload for `POST /wp-json/aether/v1/chronos-entries`, `$wpdb` SQL schema, PHP 8.2 controller, and WordPress custom capabilities contract (`agency_pm`, `senior_wp_dev`).
 
@@ -141,22 +140,23 @@ Registered in `AetherDigital\WP\PostTypes\CustomPostTypes`:
 - `volt_reward_item`: Manages trade rewards catalog with field group `group_volt_sku_specs.json`.
 - `chronos_project`: Manages client projects and retainer budgets with field group `group_chronos_retainer.json`.
 
-### 4.3 REST API Controllers
-Registered on `rest_api_init` under namespace `aether/v1`:
-- `POST /wp-json/aether/v1/aura-quotes`: Validates dimensions, engineering load pressures, and persists quote post meta.
-- `GET /wp-json/aether/v1/sku-switch`: Performs fast SQL queries across competitor and Aether lighting models.
-- `POST /wp-json/aether/v1/volt-claims`: Executes ATO Modulus 89 ABN validation in PHP, checks invoice number deduplication, and records ledger credits.
-- `POST /wp-json/aether/v1/chronos-entries`: Verifies user capabilities (`agency_pm`, `senior_wp_dev`), inserts timesheet records, and returns updated retainer burn percentages.
+### 4.3 REST API Controllers & Roles
+Registered on `rest_api_init` under namespace `aether/v1` with custom capabilities provisioned by `AetherDigital\WP\Auth\RolesManager` (`agency_pm`, `senior_wp_dev`, `trade_contractor`):
+- `POST/GET /wp-json/aether/v1/aura-quotes`: Validates dimensions, 4-digit postcodes, engineering load pressures, and persists or lists `aura_quote` records.
+- `GET /wp-json/aether/v1/sku-switch`: Queries competitor and Aether lighting models with brand and category filters.
+- `POST/GET /wp-json/aether/v1/volt-claims` and `POST /wp-json/aether/v1/volt-redeem`: Enforces contractor authentication, ATO Modulus 89 ABN validation, transactional double-entry ledger updates with row locking, server-side tier resolution, and overdraft-safe reward redemptions.
+- `POST/GET/DELETE /wp-json/aether/v1/chronos-entries`: Verifies user capabilities `agency_pm` or `senior_wp_dev`, inserts or queries timesheet records, and returns updated retainer burn percentages.
 
-### 4.4 WooCommerce HPOS Compatibility
+### 4.4 WooCommerce HPOS Compatibility & Gutenberg Embeds
 - Formally declares compatibility with WooCommerce High-Performance Order Storage via `FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true)`.
 - Listens to `woocommerce_order_status_completed` to extract contractor tier and order subtotal, automatically recording loyalty points credits in `wp_aether_reward_ledger`.
+- Registers dynamic Gutenberg block `aether/app-embed` alongside shortcodes `[aether_aurabuild]`, `[aether_voltswitch]`, and `[aether_chronosflow]`, plus custom admin columns and a `Reward Ledger` admin page.
 
-### 4.5 Headless Theme Bridge
-Located in `/wordpress/aether-wp-core/theme-bridge/`:
-- Configures CORS preflight headers (`Access-Control-Allow-Origin: *`, `Authorization`, `X-WP-Nonce`).
-- Enqueues REST API nonces via `wp_localize_script('aether-bridge', 'AetherSettings', ...)`.
-- Strips default frontend bloat (emojis, generator tags, global block CSS) for ultra-low latency headless API responses.
+### 4.5 Standalone Custom WordPress Theme & Playground Blueprint
+Located in `/wordpress/aether-digital-theme` with an accompanying WordPress Playground blueprint at `/wordpress/blueprint.json`:
+- Valid WordPress theme containing `style.css`, `theme.json`, `index.php`, `header.php`, `footer.php`, and full-bleed template `templates/page-app-canvas.php`.
+- Configures origin-allowlisted CORS headers with `Vary: Origin` and `Access-Control-Allow-Credentials: true`.
+- Enqueues REST API nonces via `wp_localize_script('aether-bridge', 'AetherSettings', ...)` and registers ACF Pro JSON load paths.
 
 
 ---
@@ -239,7 +239,7 @@ Each application directory includes its own `vercel.json` routing configuration 
 | Monotonic Wall-Clock Time Tracking | ChronosFlow | Fully Compliant (Delta Persistence) |
 | W3C WCAG 2.1 AA Contrast (>= 4.5:1) | All WebApps | Fully Compliant (Verified Tokens) |
 | Zero Emoji Policy in Production UI | All WebApps | Fully Compliant (Phosphor SVG only) |
-| PSR-12 & WordPress PHP 8.2 Standards | WP Core | Fully Compliant (php -l clean) |
+| PSR-12 & WordPress PHP 8.2 Standards | WP Core & Theme | Fully Compliant (php -l + runtime tests clean) |
 | WooCommerce HPOS Compatibility | WP Core | Fully Compliant (Custom Order Tables) |
 
 ---

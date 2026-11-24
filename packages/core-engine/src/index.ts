@@ -17,8 +17,9 @@ export * from "./chronos/types";
 export * from "./chronos/chronos-calc";
 export * from "./chronos/chronos-fixtures";
 
-// Storage Engine
+// Storage Engine & Dual-Mode WP REST Client
 export * from "./storage/adapter";
+export * from "./storage/wp-rest-client";
 
 // WordPress Recruiter Inspector Metadata
 export * from "./wp-inspector/wp-metadata";

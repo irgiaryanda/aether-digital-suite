@@ -35,6 +35,20 @@ describe("AuraBuild Postcode & AS/NZS 4505 Wind Region Resolver", () => {
     expect(res.windRegion).toBe("D");
     expect(res.leadTimeWeeks).toBe(7);
   });
+
+  it("resolves Canberra ACT (2600) ahead of NSW catch-all", () => {
+    const res = resolvePostcode("2600");
+    expect(res.state).toBe("ACT");
+    expect(res.windRegion).toBe("A");
+    expect(res.leadTimeWeeks).toBe(3);
+  });
+
+  it("resolves Darwin NT (0800) to Region C cyclonic zone", () => {
+    const res = resolvePostcode("0800");
+    expect(res.state).toBe("NT");
+    expect(res.windRegion).toBe("C");
+    expect(res.leadTimeWeeks).toBe(6);
+  });
 });
 
 describe("AuraBuild Garage Door Structural Engineering Math", () => {
@@ -135,5 +149,24 @@ describe("AuraBuild Pool Hydraulics & BOM Engine", () => {
     expect(bom.subtotalExGstAud).toBeGreaterThan(4000);
     expect(bom.gstAud).toBe(Math.round(bom.subtotalExGstAud * 0.10 * 100) / 100);
     expect(bom.totalIncGstAud).toBe(bom.subtotalExGstAud + bom.gstAud);
+  });
+
+  it("adds architectural vertical batten surcharge when selected in BOM", () => {
+    const baseConfig = {
+      widthMm: 4800,
+      heightMm: 2400,
+      panelCount: 5,
+      finish: "COLORBOND_MONUMENT" as const,
+      doorStyle: "ARCHITECTURAL_HORIZONTAL" as const,
+      glazing: "NONE" as const,
+      motorDrive: "BELT_SILENT_800N" as const,
+      postcode: "2000",
+    };
+    const battenConfig = { ...baseConfig, doorStyle: "VERTICAL_BATTEN" as const };
+    const eng = calculateGarageDoorEngineering(baseConfig);
+    const baseBom = generateGarageDoorBom(baseConfig, eng);
+    const battenBom = generateGarageDoorBom(battenConfig, eng);
+
+    expect(battenBom.subtotalExGstAud - baseBom.subtotalExGstAud).toBe(950);
   });
 });

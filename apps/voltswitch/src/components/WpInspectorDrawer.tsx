@@ -1,27 +1,54 @@
-import React, { useState } from "react";
-import { VOLT_WP_METADATA } from "@aether/core-engine";
+import React, { useEffect, useState } from "react";
+import { VOLT_WP_METADATA, WpSyncTelemetry } from "@aether/core-engine";
 import { X, Code, Database, FileText, ShoppingCart } from "@phosphor-icons/react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   livePayload: Record<string, unknown>;
+  syncTelemetry?: WpSyncTelemetry | null;
 }
 
-export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayload }) => {
+export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayload, syncTelemetry }) => {
   const [tab, setTab] = useState<"rest" | "php" | "sql" | "hpos">("rest");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs flex justify-end">
-      <div className="bg-[#0B0F19] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs">
+    <div
+      className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs flex justify-end"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="volt-wp-inspector-title"
+        className="bg-[#0B0F19] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs"
+      >
         <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between bg-volt-surface">
           <div className="flex items-center space-x-2">
             <span className="w-2.5 h-2.5 rounded-full bg-volt-amber animate-pulse" />
-            <h2 className="font-bold text-xs text-white">WooCommerce HPOS & WP Inspector</h2>
+            <h2 id="volt-wp-inspector-title" className="font-bold text-xs text-white font-sans">
+              WooCommerce HPOS & WP Inspector
+            </h2>
           </div>
-          <button type="button" onClick={onClose} className="p-1 rounded text-white/60 hover:text-white">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close WooCommerce Inspector Drawer"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1 rounded text-white/60 hover:text-white"
+          >
             <X size={18} />
           </button>
         </div>
@@ -52,6 +79,17 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
         </div>
 
         <div className="p-4 overflow-y-auto flex-1 space-y-3">
+          {syncTelemetry && (
+            <div className="p-2.5 rounded-lg bg-volt-surface border border-amber-500/30 flex items-center justify-between text-[11px]">
+              <span>
+                Transport: <strong className="text-volt-amber">{syncTelemetry.mode}</strong>
+              </span>
+              <span className="text-emerald-400 tabular-nums">
+                HTTP {syncTelemetry.status} &middot; {syncTelemetry.latencyMs}ms
+              </span>
+            </div>
+          )}
+
           {tab === "rest" && (
             <div className="space-y-3">
               <div className="flex justify-between text-[11px] text-white/70">
@@ -80,7 +118,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
 
           {tab === "sql" && (
             <div className="space-y-2">
-              <span className="text-[11px] text-white/70 block">Table: wp_aether_reward_ledger (Double-Entry)</span>
+              <span className="text-[11px] text-white/70 block">Table: wp_aether_reward_ledger</span>
               <pre className="p-3 bg-volt-base rounded-lg border border-white/10 overflow-x-auto text-[11px] text-blue-200">
                 {VOLT_WP_METADATA.sqlSchemaSnippet}
               </pre>
@@ -96,7 +134,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
                 {`public static function handle_completed_order(int $order_id): void {
     $order = wc_get_order($order_id);
     $subtotal = floatval($order->get_subtotal());
-    $points = intval(floor($subtotal * 1.5));
+    $points = intval(floor($subtotal * $multiplier));
 
     $wpdb->insert("{$wpdb->prefix}aether_reward_ledger", [
         'contractor_id'  => $customer_id,

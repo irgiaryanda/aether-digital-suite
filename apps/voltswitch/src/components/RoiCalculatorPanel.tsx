@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { CommercialSkuItem, calculateRetrofitRoi } from "@aether/core-engine";
 import { Calculator, DownloadSimple } from "@phosphor-icons/react";
+import { RoiPaybackChart } from "./RoiPaybackChart";
 
 interface Props {
   sku: CommercialSkuItem;
@@ -52,14 +53,14 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
       <div className="flex items-center justify-between border-b border-volt-border pb-3">
         <div className="flex items-center space-x-2">
           <Calculator size={18} className="text-volt-amber" weight="fill" />
-          <h3 className="font-bold text-sm text-white font-mono">
+          <h3 className="font-bold text-sm text-white font-sans">
             Commercial Energy & Carbon Payback
           </h3>
         </div>
         <button
           type="button"
           onClick={handleExportCsv}
-          className="px-2 py-1 rounded bg-volt-elevated hover:bg-volt-base border border-volt-border text-volt-amber text-xs font-mono font-bold flex items-center space-x-1"
+          className="px-2.5 py-1 rounded bg-volt-elevated hover:bg-volt-base border border-volt-border text-volt-amber text-xs font-mono font-bold flex items-center space-x-1"
         >
           <DownloadSimple size={14} />
           <span>CSV</span>
@@ -70,7 +71,7 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
         <div>
           <div className="flex justify-between mb-1">
             <span className="text-gray-400">Qty</span>
-            <span className="text-white font-bold">{quantity}</span>
+            <span className="text-white font-bold tabular-nums">{quantity}</span>
           </div>
           <input
             type="range"
@@ -86,7 +87,7 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
         <div>
           <div className="flex justify-between mb-1">
             <span className="text-gray-400">Daily Hrs</span>
-            <span className="text-white font-bold">{dailyHours}h</span>
+            <span className="text-white font-bold tabular-nums">{dailyHours}h</span>
           </div>
           <input
             type="range"
@@ -102,7 +103,7 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
         <div>
           <div className="flex justify-between mb-1">
             <span className="text-gray-400">Days/Yr</span>
-            <span className="text-white font-bold">{annualDays}d</span>
+            <span className="text-white font-bold tabular-nums">{annualDays}d</span>
           </div>
           <input
             type="range"
@@ -118,7 +119,7 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
         <div>
           <div className="flex justify-between mb-1">
             <span className="text-gray-400">Tariff</span>
-            <span className="text-white font-bold">${tariff.toFixed(2)}</span>
+            <span className="text-white font-bold tabular-nums">${tariff.toFixed(2)}</span>
           </div>
           <input
             type="range"
@@ -150,6 +151,8 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
           <span className="font-bold text-cyan-400 tabular-nums">{roi.paybackPeriodMonths} mos</span>
         </div>
       </div>
+
+      <RoiPaybackChart roi={roi} />
     </div>
   );
 };

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AetherDigital\WP\WooCommerce;
 
 if (!defined('ABSPATH')) {
-    // Stub
+    exit;
 }
 
 class LoyaltyOrderHook
@@ -28,8 +28,11 @@ class LoyaltyOrderHook
             return;
         }
 
-        $tier = (string) $order->get_meta('_contractor_tier');
-        if (empty($tier)) {
+        $tier = strtoupper((string) $order->get_meta('_contractor_tier'));
+        if ($tier === '' && function_exists('get_user_meta')) {
+            $tier = strtoupper((string) \get_user_meta($customer_id, '_aether_contractor_tier', true));
+        }
+        if ($tier === '') {
             $tier = 'BRONZE';
         }
 
@@ -55,7 +58,6 @@ class LoyaltyOrderHook
         $table = "{$prefix}aether_reward_ledger";
 
         if (isset($wpdb) && method_exists($wpdb, 'insert')) {
-            // Deduplication check
             $existing = $wpdb->get_var($wpdb->prepare(
                 "SELECT id FROM {$table} WHERE reference_type = %s AND reference_id = %s LIMIT 1",
                 'WOOCOMMERCE_ORDER',

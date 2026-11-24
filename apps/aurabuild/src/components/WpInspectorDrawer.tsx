@@ -1,29 +1,54 @@
-import React, { useState } from "react";
-import { AURA_WP_METADATA } from "@aether/core-engine";
+import React, { useEffect, useState } from "react";
+import { AURA_WP_METADATA, WpSyncTelemetry } from "@aether/core-engine";
 import { X, Code, Database, FileText, CheckCircle } from "@phosphor-icons/react";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   livePayload: Record<string, unknown>;
+  syncTelemetry?: WpSyncTelemetry | null;
 }
 
-export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayload }) => {
+export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayload, syncTelemetry }) => {
   const [tab, setTab] = useState<"rest" | "php" | "sql" | "acf">("rest");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end">
-      <div className="bg-[#0F1117] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs">
+    <div
+      className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end print:hidden"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="aura-wp-inspector-title"
+        className="bg-[#0F1117] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs"
+      >
         <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between bg-[#161B22]">
           <div className="flex items-center space-x-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h2 className="font-bold text-xs text-white font-sans">
+            <h2 id="aura-wp-inspector-title" className="font-bold text-xs text-white font-sans">
               WordPress PHP & ACF Architecture Inspector
             </h2>
           </div>
-          <button type="button" onClick={onClose} className="p-1 rounded text-white/60 hover:text-white">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close WordPress Inspector Drawer"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1 rounded text-white/60 hover:text-white"
+          >
             <X size={18} />
           </button>
         </div>
@@ -54,6 +79,17 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
         </div>
 
         <div className="p-4 overflow-y-auto flex-1 space-y-3">
+          {syncTelemetry && (
+            <div className="p-2.5 rounded-lg bg-[#161B22] border border-cyan-500/30 flex items-center justify-between text-[11px]">
+              <span>
+                Transport: <strong className="text-cyan-300">{syncTelemetry.mode}</strong>
+              </span>
+              <span className="text-emerald-400 tabular-nums">
+                HTTP {syncTelemetry.status} &middot; {syncTelemetry.latencyMs}ms
+              </span>
+            </div>
+          )}
+
           {tab === "rest" && (
             <div className="space-y-3">
               <div className="flex items-center justify-between text-[11px] text-white/70">

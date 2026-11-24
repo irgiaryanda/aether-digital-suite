@@ -5,7 +5,7 @@ import {
   PoolConfig,
   PoolHydraulics,
 } from "@aether/core-engine";
-import { Moon, Sun, Ruler } from "@phosphor-icons/react";
+import { Moon, Sun, Ruler, Blueprint, ArrowsVertical } from "@phosphor-icons/react";
 import { GarageDoorSvg } from "./GarageDoorSvg";
 import { LuxuryPoolSvg } from "./LuxuryPoolSvg";
 
@@ -26,10 +26,12 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
 }) => {
   const [isNightMode, setIsNightMode] = useState(false);
   const [showDimensions, setShowDimensions] = useState(true);
+  const [isDoorOpen, setIsDoorOpen] = useState(false);
+  const [showEngineeringOverlay, setShowEngineeringOverlay] = useState(false);
 
   return (
     <div className="bg-white rounded-xl border border-aura-border shadow-sm flex flex-col overflow-hidden relative">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-aura-border bg-aura-subtle">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 border-b border-aura-border bg-aura-subtle">
         <div className="flex items-center space-x-2">
           <span className="text-xs font-semibold text-aura-text tracking-wide uppercase">
             {productType === "GARAGE_DOOR" ? "Architectural Sectional Door" : "Cantilevered Concrete Pool"}
@@ -41,10 +43,45 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center flex-wrap gap-1.5">
+          {productType === "GARAGE_DOOR" && (
+            <button
+              type="button"
+              onClick={() => setIsDoorOpen(!isDoorOpen)}
+              aria-label="Toggle Garage Door Open or Closed"
+              className={`p-1.5 rounded text-xs flex items-center space-x-1 border transition-colors ${
+                isDoorOpen
+                  ? "bg-aura-monument text-white border-aura-monument shadow-sm"
+                  : "bg-white text-aura-text-muted border-aura-border hover:text-aura-text"
+              }`}
+              title="Animate Door Operation"
+            >
+              <ArrowsVertical size={14} weight="bold" />
+              <span className="hidden sm:inline text-[11px] font-medium">
+                {isDoorOpen ? "Close Door" : "Open Door"}
+              </span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setShowEngineeringOverlay(!showEngineeringOverlay)}
+            aria-label="Toggle Structural Engineering X-Ray Overlay"
+            className={`p-1.5 rounded text-xs flex items-center space-x-1 border transition-colors ${
+              showEngineeringOverlay
+                ? "bg-cyan-950 text-cyan-300 border-cyan-700 shadow-sm"
+                : "bg-white text-aura-text-muted border-aura-border hover:text-aura-text"
+            }`}
+            title="Toggle Engineering Overlay"
+          >
+            <Blueprint size={14} weight="bold" />
+            <span className="hidden sm:inline text-[11px] font-medium">X-Ray</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setShowDimensions(!showDimensions)}
+            aria-label="Toggle Dimension Markers"
             className={`p-1.5 rounded text-xs flex items-center space-x-1 border transition-colors ${
               showDimensions
                 ? "bg-white text-aura-cyan border-aura-cyan shadow-sm"
@@ -59,6 +96,7 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
           <button
             type="button"
             onClick={() => setIsNightMode(!isNightMode)}
+            aria-label="Toggle Ambient Lighting Mode"
             className={`p-1.5 rounded text-xs flex items-center space-x-1 border transition-colors ${
               isNightMode
                 ? "bg-[#1A1D20] text-amber-300 border-black shadow-sm"
@@ -75,7 +113,7 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
       </div>
 
       <div
-        className={`relative w-full aspect-[4/3] flex items-center justify-center p-6 transition-colors duration-500 overflow-hidden ${
+        className={`relative w-full aspect-[4/3] flex items-center justify-center p-4 sm:p-6 transition-colors duration-500 overflow-hidden ${
           isNightMode ? "bg-[#111418]" : "bg-[#F3F4F6]"
         }`}
       >
@@ -85,6 +123,8 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
             engineering={garageEngineering}
             isNightMode={isNightMode}
             showDimensions={showDimensions}
+            isDoorOpen={isDoorOpen}
+            showEngineeringOverlay={showEngineeringOverlay}
           />
         ) : (
           <LuxuryPoolSvg
@@ -92,6 +132,7 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
             hydraulics={poolHydraulics}
             isNightMode={isNightMode}
             showDimensions={showDimensions}
+            showEngineeringOverlay={showEngineeringOverlay}
           />
         )}
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
-import { ContractorProfile } from "@aether/core-engine";
-import { ArrowsClockwise, CheckCircle, Coins, Database, Lightning, Receipt, Table } from "@phosphor-icons/react";
+import { CONTRACTOR_TIERS, ContractorProfile } from "@aether/core-engine";
+import { ArrowsClockwise, Coins, Database, Lightning, Receipt, Table } from "@phosphor-icons/react";
 
 interface HeaderProps {
   contractor: ContractorProfile;
@@ -17,6 +17,8 @@ export const Header: React.FC<HeaderProps> = ({
   onResetDemoData,
   onOpenWpInspector,
 }) => {
+  const tierMultiplier = CONTRACTOR_TIERS[contractor.tier].multiplier;
+
   return (
     <header className="bg-volt-surface border-b border-volt-border sticky top-0 z-40 shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
                   ABN {contractor.abn}
                 </span>
               </div>
-              <p className="text-[11px] text-gray-400 truncate max-w-[200px] sm:max-w-xs">
+              <p className="text-[11px] text-gray-400 truncate max-w-[170px] sm:max-w-xs">
                 {contractor.companyName}
               </p>
             </div>
@@ -84,8 +86,8 @@ export const Header: React.FC<HeaderProps> = ({
 
           <div className="flex items-center space-x-2">
             <div className="hidden lg:flex items-center space-x-2 px-2.5 py-1 rounded-lg border bg-amber-950/60 border-amber-500/50">
-              <span className="text-[10px] font-mono font-bold text-amber-400">
-                {contractor.tier} (1.5x)
+              <span className="text-[10px] font-mono font-bold text-amber-400 tabular-nums">
+                {contractor.tier} ({tierMultiplier}x)
               </span>
               <div className="border-l border-white/10 pl-2 flex items-center space-x-1">
                 <Coins size={14} className="text-volt-amber" weight="fill" />
@@ -99,7 +101,8 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onResetDemoData}
               title="Reset Demo Data"
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-volt-elevated border border-volt-border text-xs font-mono"
+              aria-label="Reset Demo Data"
+              className="min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-white hover:bg-volt-elevated border border-volt-border text-xs font-mono"
             >
               <ArrowsClockwise size={15} />
             </button>
@@ -107,12 +110,47 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenWpInspector}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-volt-amber bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-bold font-mono flex items-center space-x-1"
+              aria-label="Inspect WooCommerce HPOS and WordPress Architecture"
+              className="min-h-[40px] min-w-[40px] p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-volt-amber bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-bold font-mono flex items-center justify-center space-x-1"
             >
               <Database size={15} />
               <span className="hidden sm:inline">Woo HPOS</span>
             </button>
           </div>
+        </div>
+
+        {/* Mobile View Switcher */}
+        <div className="flex md:hidden items-center bg-volt-base p-1 rounded-lg border border-volt-border mb-2.5 gap-1">
+          <button
+            type="button"
+            onClick={() => onViewChange("sku-switch")}
+            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
+              activeView === "sku-switch" ? "bg-volt-elevated text-volt-amber border border-volt-border" : "text-gray-400"
+            }`}
+          >
+            <Lightning size={13} />
+            <span>SKU & ROI</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewChange("loyalty-claims")}
+            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
+              activeView === "loyalty-claims" ? "bg-volt-elevated text-volt-amber border border-volt-border" : "text-gray-400"
+            }`}
+          >
+            <Receipt size={13} />
+            <span>Claims</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewChange("trade-catalog")}
+            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
+              activeView === "trade-catalog" ? "bg-volt-elevated text-volt-amber border border-volt-border" : "text-gray-400"
+            }`}
+          >
+            <Table size={13} />
+            <span>Matrix</span>
+          </button>
         </div>
       </div>
     </header>

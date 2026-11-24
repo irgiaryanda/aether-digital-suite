@@ -40,6 +40,27 @@ export function generateGarageDoorBom(
     lineTotalAud: finishSpec.price,
   });
 
+  const doorStyle = config.doorStyle ?? "ARCHITECTURAL_HORIZONTAL";
+  if (doorStyle !== "ARCHITECTURAL_HORIZONTAL") {
+    const styleSpecs: Record<
+      Exclude<NonNullable<GarageDoorConfig["doorStyle"]>, "ARCHITECTURAL_HORIZONTAL">,
+      { sku: string; name: string; price: number }
+    > = {
+      VERTICAL_BATTEN: { sku: "STY-VERT-BAT", name: "Architectural Vertical Aluminum Batten Profile", price: 950 },
+      HAMPTONS_COFFERED: { sku: "STY-HAMP-COF", name: "Hamptons Coffered Colonial Millwork Profile", price: 780 },
+      FLUSH_MOUNT: { sku: "STY-FLUSH-ARC", name: "Concealed Flush-Mount Architectural Facade Kit", price: 1250 },
+    };
+    const styleSpec = styleSpecs[doorStyle];
+    items.push({
+      sku: styleSpec.sku,
+      description: styleSpec.name,
+      category: "FINISH",
+      quantity: 1,
+      unitPriceAud: styleSpec.price,
+      lineTotalAud: styleSpec.price,
+    });
+  }
+
   if (config.glazing !== "NONE") {
     const glazingPrices: Record<Exclude<GarageDoorConfig["glazing"], "NONE">, { sku: string; name: string; price: number }> = {
       ACRYLIC_CLEAR_TOP: { sku: "GLA-ACR-CLR", name: "Impact Acrylic Clear Horizon Inserts", price: 680 },

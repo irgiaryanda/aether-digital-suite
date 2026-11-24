@@ -7,6 +7,7 @@ export const DEFAULT_GARAGE_CONFIG: GarageDoorConfig = {
   heightMm: 2400,
   panelCount: 5,
   finish: "COLORBOND_MONUMENT",
+  doorStyle: "ARCHITECTURAL_HORIZONTAL",
   glazing: "FROSTED_PRIVACY_TOP",
   motorDrive: "BELT_SILENT_800N",
   postcode: "2088",

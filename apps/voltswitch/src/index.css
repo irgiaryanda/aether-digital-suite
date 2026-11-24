@@ -14,7 +14,13 @@
   }
 }
 
-/* Custom Industrial Dark Scrollbars */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

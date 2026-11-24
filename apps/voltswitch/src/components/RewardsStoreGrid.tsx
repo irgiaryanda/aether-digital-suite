@@ -4,23 +4,26 @@ import {
   PointsLedgerEntry,
   RewardCatalogItem,
   createLedgerDebit,
+  wpRestClient,
 } from "@aether/core-engine";
-import { Gift, CheckCircle, Warning, Tag } from "@phosphor-icons/react";
+import { Gift, CheckCircle } from "@phosphor-icons/react";
 
 interface Props {
   rewards: RewardCatalogItem[];
   contractor: ContractorProfile;
   onRedemption: (entry: PointsLedgerEntry, updatedContractor: ContractorProfile) => void;
+  onSyncComplete?: () => void;
 }
 
 export const RewardsStoreGrid: React.FC<Props> = ({
   rewards,
   contractor,
   onRedemption,
+  onSyncComplete,
 }) => {
   const [voucherNotice, setVoucherNotice] = useState<{ title: string; code: string } | null>(null);
 
-  const handleRedeem = (item: RewardCatalogItem) => {
+  const handleRedeem = async (item: RewardCatalogItem) => {
     if (contractor.currentPointsBalance < item.pointsCost) return;
 
     const voucherCode = `VCH-${item.category.slice(0, 4)}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
@@ -34,12 +37,30 @@ export const RewardsStoreGrid: React.FC<Props> = ({
       `Redemption: ${item.title} ($${item.audEquivalentValue} AUD value)`
     );
 
+    await wpRestClient.dispatchWithFallback(
+      "/wp-json/aether/v1/volt-redeem",
+      "POST",
+      {
+        reward_title: item.title,
+        reward_sku: item.sku,
+        points_cost: item.pointsCost,
+      },
+      {
+        success: true,
+        voucher_code: voucherCode,
+        points_spent: item.pointsCost,
+        new_balance: updatedBalance,
+      },
+      { appKey: "voltswitch" }
+    );
+
     const updated = {
       ...contractor,
       currentPointsBalance: updatedBalance,
     };
 
     onRedemption(entry, updated);
+    onSyncComplete?.();
     setVoucherNotice({ title: item.title, code: voucherCode });
   };
 
@@ -82,8 +103,8 @@ export const RewardsStoreGrid: React.FC<Props> = ({
                   </span>
                   <span className="text-[10px] text-gray-400">{reward.brand}</span>
                 </div>
-                <h4 className="font-bold text-white text-xs mt-2">{reward.title}</h4>
-                <p className="text-[10px] text-gray-400 mt-1 line-clamp-2">{reward.description}</p>
+                <h4 className="font-bold text-white text-xs mt-2 font-sans">{reward.title}</h4>
+                <p className="text-[10px] text-gray-400 mt-1 line-clamp-2 font-sans">{reward.description}</p>
               </div>
 
               <div className="pt-2 border-t border-volt-border/60 space-y-2">
@@ -100,7 +121,7 @@ export const RewardsStoreGrid: React.FC<Props> = ({
                   type="button"
                   disabled={!canAfford}
                   onClick={() => handleRedeem(reward)}
-                  className={`w-full py-1.5 rounded font-bold text-[11px] transition-colors ${
+                  className={`w-full min-h-[36px] py-1.5 rounded font-bold text-[11px] transition-colors ${
                     canAfford
                       ? "bg-volt-elevated hover:bg-volt-amber hover:text-black text-white border border-volt-border"
                       : "bg-volt-base text-gray-600 border border-volt-border/30 cursor-not-allowed"

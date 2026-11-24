@@ -13,6 +13,7 @@ interface Props {
   ledger: PointsLedgerEntry[];
   rewards: RewardCatalogItem[];
   onLedgerUpdate: (entry: PointsLedgerEntry, updatedContractor: ContractorProfile) => void;
+  onSyncComplete?: () => void;
 }
 
 export const LoyaltyPortalView: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const LoyaltyPortalView: React.FC<Props> = ({
   ledger,
   rewards,
   onLedgerUpdate,
+  onSyncComplete,
 }) => {
   return (
     <div className="space-y-6">
@@ -29,6 +31,7 @@ export const LoyaltyPortalView: React.FC<Props> = ({
             contractor={contractor}
             existingLedger={ledger}
             onClaimSubmitted={onLedgerUpdate}
+            onSyncComplete={onSyncComplete}
           />
         </div>
         <div className="lg:col-span-7">
@@ -40,6 +43,7 @@ export const LoyaltyPortalView: React.FC<Props> = ({
         rewards={rewards}
         contractor={contractor}
         onRedemption={onLedgerUpdate}
+        onSyncComplete={onSyncComplete}
       />
     </div>
   );

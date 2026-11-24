@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1440px"
+    },
+    "color": {
+      "palette": [
+        { "slug": "aura-bg", "color": "#F8F9FA", "name": "Aura Studio Canvas" },
+        { "slug": "aura-monument", "color": "#282B30", "name": "Colorbond Monument" },
+        { "slug": "aura-cyan", "color": "#0E7490", "name": "Coastal Cyan" },
+        { "slug": "volt-obsidian", "color": "#0B0F19", "name": "VoltSwitch Obsidian" },
+        { "slug": "volt-amber", "color": "#F59E0B", "name": "Safety Amber" },
+        { "slug": "chronos-indigo", "color": "#6366F1", "name": "Chronos Indigo" }
+      ]
+    },
+    "typography": {
+      "fontFamilies": [
+        { "fontFamily": "'Space Grotesk', sans-serif", "slug": "display", "name": "Display" },
+        { "fontFamily": "'Inter', sans-serif", "slug": "sans", "name": "Interface" },
+        { "fontFamily": "'JetBrains Mono', monospace", "slug": "mono", "name": "Telemetry Mono" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "#F8F9FA",
+      "text": "#1A1D20"
+    }
+  },
+  "templateParts": [
+    { "name": "header", "title": "Header", "area": "header" },
+    { "name": "footer", "title": "Footer", "area": "footer" }
+  ]
+}

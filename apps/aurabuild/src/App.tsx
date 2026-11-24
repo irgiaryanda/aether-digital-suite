@@ -5,11 +5,13 @@ import {
   DEFAULT_POOL_CONFIG,
   GarageDoorConfig,
   PoolConfig,
+  WpSyncTelemetry,
   aetherStorage,
   calculateGarageDoorEngineering,
   calculatePoolHydraulics,
   generateGarageDoorBom,
   generatePoolBom,
+  wpRestClient,
 } from "@aether/core-engine";
 import { Header } from "./components/Header";
 import { AuraVisualizer } from "./components/AuraVisualizer";
@@ -17,6 +19,7 @@ import { ConfiguratorPanel } from "./components/ConfiguratorPanel";
 import { QuoteWizard } from "./components/QuoteWizard";
 import { SavedQuotesDrawer } from "./components/SavedQuotesDrawer";
 import { WpInspectorDrawer } from "./components/WpInspectorDrawer";
+import { PrintableSpecSheet } from "./components/PrintableSpecSheet";
 
 export const App: React.FC = () => {
   const [productType, setProductType] = useState<"GARAGE_DOOR" | "LUXURY_POOL">("GARAGE_DOOR");
@@ -36,6 +39,9 @@ export const App: React.FC = () => {
   const [isQuoteWizardOpen, setIsQuoteWizardOpen] = useState(false);
   const [isSavedQuotesOpen, setIsSavedQuotesOpen] = useState(false);
   const [isWpInspectorOpen, setIsWpInspectorOpen] = useState(false);
+  const [syncTelemetry, setSyncTelemetry] = useState<WpSyncTelemetry | null>(() =>
+    wpRestClient.getLastSyncTelemetry("aurabuild")
+  );
 
   const garageEngineering = useMemo(() => calculateGarageDoorEngineering(garageConfig), [garageConfig]);
   const garageBom = useMemo(() => generateGarageDoorBom(garageConfig, garageEngineering), [garageConfig, garageEngineering]);
@@ -96,9 +102,9 @@ export const App: React.FC = () => {
         savedQuotesCount={savedQuotes.length}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 print:hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div className="lg:col-span-7 xl:col-span-8 sticky top-24">
+          <div className="lg:col-span-7 xl:col-span-8 lg:sticky lg:top-24">
             <AuraVisualizer
               productType={productType}
               garageConfig={garageConfig}
@@ -125,6 +131,16 @@ export const App: React.FC = () => {
         </div>
       </main>
 
+      <PrintableSpecSheet
+        productType={productType}
+        garageConfig={garageConfig}
+        garageEngineering={garageEngineering}
+        garageBom={garageBom}
+        poolConfig={poolConfig}
+        poolHydraulics={poolHydraulics}
+        poolBom={poolBom}
+      />
+
       <QuoteWizard
         isOpen={isQuoteWizardOpen}
         onClose={() => setIsQuoteWizardOpen(false)}
@@ -136,6 +152,7 @@ export const App: React.FC = () => {
         poolHydraulics={poolHydraulics}
         poolBom={poolBom}
         onQuoteSubmitted={(q) => setSavedQuotes((prev) => [q, ...prev])}
+        onSyncComplete={() => setSyncTelemetry(wpRestClient.getLastSyncTelemetry("aurabuild"))}
       />
 
       <SavedQuotesDrawer
@@ -148,6 +165,7 @@ export const App: React.FC = () => {
         isOpen={isWpInspectorOpen}
         onClose={() => setIsWpInspectorOpen(false)}
         livePayload={liveWpPayload}
+        syncTelemetry={syncTelemetry}
       />
     </div>
   );

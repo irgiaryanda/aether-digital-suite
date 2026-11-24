@@ -22,13 +22,16 @@ export const App: React.FC = () => {
   }, [state.timesheets]);
 
   const handleStartTask = (task: KanbanTask) => {
+    const projectRate =
+      state.projects.find((p) => p.id === task.projectId)?.hourlyRateAud ?? 185;
+
     state.updateTimer({
       taskId: task.id,
       projectId: task.projectId,
       description: task.title,
       phase: task.phase,
       isBillable: task.isBillable,
-      hourlyRateAud: 185,
+      hourlyRateAud: projectRate,
       startedAtMs: Date.now(),
       accumulatedSeconds: 0,
       isRunning: true,
@@ -49,7 +52,7 @@ export const App: React.FC = () => {
   }, [state.activeTimer, state.timesheets]);
 
   return (
-    <div className="min-h-screen bg-chronos-canvas text-gray-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-chronos-canvas text-gray-100 flex flex-col font-sans print:bg-white print:text-black">
       <Header
         activeView={activeView}
         onViewChange={setActiveView}
@@ -59,7 +62,7 @@ export const App: React.FC = () => {
         onOpenWpInspector={() => setIsWpOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 print:p-0 print:space-y-0">
         <ActiveTimerBar
           projects={state.projects}
           timerState={state.activeTimer}
@@ -98,6 +101,7 @@ export const App: React.FC = () => {
         isOpen={isWpOpen}
         onClose={() => setIsWpOpen(false)}
         livePayload={wpPayload}
+        syncTelemetry={state.syncTelemetry}
       />
     </div>
   );

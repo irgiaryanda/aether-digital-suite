@@ -1,5 +1,5 @@
 import React from "react";
-import { GarageDoorConfig, GarageFinish, GlazingOption } from "@aether/core-engine";
+import { GarageDoorConfig, GarageDoorStyle, GarageFinish, GlazingOption } from "@aether/core-engine";
 
 interface Props {
   config: GarageDoorConfig;
@@ -7,6 +7,13 @@ interface Props {
 }
 
 export const GarageMaterials: React.FC<Props> = ({ config, onChange }) => {
+  const styles: { id: GarageDoorStyle; name: string; desc: string }[] = [
+    { id: "ARCHITECTURAL_HORIZONTAL", name: "Architectural Horizontal Rib", desc: "Clean linear rib geometry" },
+    { id: "VERTICAL_BATTEN", name: "Vertical Batten Cladding", desc: "Bespoke architectural batten relief" },
+    { id: "HAMPTONS_COFFERED", name: "Hamptons Coffered Frame", desc: "Symmetrical coastal millwork panels" },
+    { id: "FLUSH_MOUNT", name: "Concealed Flush Mount", desc: "Seamless negative-detail facade" },
+  ];
+
   const finishes: { id: GarageFinish; name: string; hex: string; note: string }[] = [
     { id: "COLORBOND_MONUMENT", name: "Colorbond Monument", hex: "#282B30", note: "Deep architectural charcoal" },
     { id: "COLORBOND_SURFMIST", name: "Colorbond Surfmist", hex: "#EAE6DF", note: "Warm contemporary off-white" },
@@ -22,8 +29,31 @@ export const GarageMaterials: React.FC<Props> = ({ config, onChange }) => {
     { id: "FULL_VIEW_PANEL", name: "Full-View Glazed Panel", desc: "Extruded aluminum framed panoramic view" },
   ];
 
+  const activeStyle = config.doorStyle ?? "ARCHITECTURAL_HORIZONTAL";
+
   return (
     <div className="space-y-4">
+      <div>
+        <label className="text-xs font-semibold text-aura-text block mb-1.5">Architectural Profile</label>
+        <div className="grid grid-cols-2 gap-1.5">
+          {styles.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => onChange({ doorStyle: s.id })}
+              className={`p-2 rounded-lg border text-left transition-all ${
+                activeStyle === s.id
+                  ? "bg-cyan-50/70 border-aura-cyan shadow-sm"
+                  : "bg-white border-aura-border hover:bg-aura-subtle"
+              }`}
+            >
+              <span className="text-[11px] font-bold text-aura-text block truncate">{s.name}</span>
+              <span className="text-[10px] text-aura-text-dim block truncate">{s.desc}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div>
         <label className="text-xs font-semibold text-aura-text block mb-1.5">Cladding Finish</label>
         <div className="space-y-1.5">

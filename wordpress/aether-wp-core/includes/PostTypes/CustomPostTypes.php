@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AetherDigital\WP\PostTypes;
 
 if (!defined('ABSPATH')) {
-    // Stub
+    exit;
 }
 
 class CustomPostTypes
@@ -16,7 +16,6 @@ class CustomPostTypes
             return;
         }
 
-        // 1. AuraBuild Architectural Quotes
         register_post_type('aura_quote', [
             'labels' => [
                 'name'               => 'Architectural Quotes',
@@ -48,7 +47,6 @@ class CustomPostTypes
             ],
         ]);
 
-        // 2. VoltSwitch Trade Reward Catalog Items
         register_post_type('volt_reward_item', [
             'labels' => [
                 'name'               => 'Trade Rewards',
@@ -71,7 +69,6 @@ class CustomPostTypes
             'supports'     => ['title', 'editor', 'thumbnail', 'custom-fields'],
         ]);
 
-        // 3. ChronosFlow Agency Client Projects
         register_post_type('chronos_project', [
             'labels' => [
                 'name'               => 'Agency Projects',
@@ -94,8 +91,8 @@ class CustomPostTypes
             'supports'     => ['title', 'editor', 'custom-fields'],
             'map_meta_cap' => true,
             'capabilities' => [
-                'edit_posts'   => 'agency_pm',
-                'publish_posts'=> 'agency_pm',
+                'edit_posts'    => 'agency_pm',
+                'publish_posts' => 'agency_pm',
             ],
         ]);
     }

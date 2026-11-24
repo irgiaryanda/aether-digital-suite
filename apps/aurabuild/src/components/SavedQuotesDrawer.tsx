@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AuraQuoteSubmission } from "@aether/core-engine";
-import { X, Printer, CalendarBlank, MapPin, Receipt } from "@phosphor-icons/react";
+import { X, Printer, CalendarBlank, MapPin } from "@phosphor-icons/react";
 
 interface SavedQuotesDrawerProps {
   isOpen: boolean;
@@ -9,31 +9,49 @@ interface SavedQuotesDrawerProps {
 }
 
 export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, onClose, quotes }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs flex justify-end">
-      <div className="bg-white w-full max-w-md h-full shadow-2xl border-l border-aura-border flex flex-col">
-        {/* Header */}
+    <div
+      className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs flex justify-end print:hidden"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="saved-quotes-title"
+        className="bg-white w-full max-w-md h-full shadow-2xl border-l border-aura-border flex flex-col"
+      >
         <div className="px-5 py-4 border-b border-aura-border flex items-center justify-between bg-aura-subtle">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-aura-cyan">
               Engineering Quotations
             </span>
-            <h2 className="text-sm font-display font-bold text-aura-text">
+            <h2 id="saved-quotes-title" className="text-sm font-display font-bold text-aura-text">
               Saved Architectural Quotes ({quotes.length})
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-aura-text-muted hover:text-aura-text hover:bg-white transition-colors"
+            aria-label="Close Saved Quotes Drawer"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1.5 rounded-lg text-aura-text-muted hover:text-aura-text hover:bg-white transition-colors"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Quotes List */}
         <div className="p-4 overflow-y-auto flex-1 space-y-3">
           {quotes.length === 0 ? (
             <div className="text-center py-12 text-aura-text-dim text-xs">
@@ -47,7 +65,7 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-aura-cyan">
-                    {q.bom.quoteReference}
+                    {q.id}
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-100 text-aura-cyan font-semibold">
                     {q.status.replace(/_/g, " ")}
@@ -72,7 +90,10 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
                   </span>
                   <button
                     type="button"
-                    onClick={() => window.print()}
+                    onClick={() => {
+                      onClose();
+                      setTimeout(() => window.print(), 80);
+                    }}
                     className="p-1.5 rounded text-aura-text-dim hover:text-aura-cyan hover:bg-white transition-colors flex items-center space-x-1 text-[11px] font-medium"
                     title="Print Specification"
                   >

@@ -18,6 +18,12 @@ export type GarageFinish =
   | "COLORBOND_WOODLAND_GREY"
   | "NATURAL_TIMBER_CEDAR";
 
+export type GarageDoorStyle =
+  | "ARCHITECTURAL_HORIZONTAL"
+  | "VERTICAL_BATTEN"
+  | "HAMPTONS_COFFERED"
+  | "FLUSH_MOUNT";
+
 export type GlazingOption = "NONE" | "ACRYLIC_CLEAR_TOP" | "FROSTED_PRIVACY_TOP" | "FULL_VIEW_PANEL";
 
 export type MotorDriveType = "BELT_SILENT_800N" | "CHAIN_HEAVY_1000N" | "COMMERCIAL_JACKSHAFT_1200N";
@@ -27,6 +33,7 @@ export interface GarageDoorConfig {
   heightMm: number;
   panelCount: number;
   finish: GarageFinish;
+  doorStyle?: GarageDoorStyle;
   glazing: GlazingOption;
   motorDrive: MotorDriveType;
   postcode: string;

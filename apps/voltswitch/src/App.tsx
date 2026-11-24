@@ -3,7 +3,9 @@ import {
   ContractorProfile,
   PointsLedgerEntry,
   RewardCatalogItem,
+  WpSyncTelemetry,
   aetherStorage,
+  wpRestClient,
 } from "@aether/core-engine";
 import { Header } from "./components/Header";
 import { SkuSwitcherView } from "./components/SkuSwitcherView";
@@ -20,6 +22,9 @@ export const App: React.FC = () => {
   const [ledger, setLedger] = useState<PointsLedgerEntry[]>(initialState.volt.ledger);
   const [rewards, setRewards] = useState<RewardCatalogItem[]>(initialState.volt.rewards);
   const [isWpInspectorOpen, setIsWpInspectorOpen] = useState(false);
+  const [syncTelemetry, setSyncTelemetry] = useState<WpSyncTelemetry | null>(() =>
+    wpRestClient.getLastSyncTelemetry("voltswitch")
+  );
 
   const handleResetDemoData = () => {
     const fresh = aetherStorage.resetToBaselineFixtures();
@@ -40,6 +45,10 @@ export const App: React.FC = () => {
         ledger: [entry, ...current.volt.ledger],
       },
     }));
+  };
+
+  const refreshTelemetry = () => {
+    setSyncTelemetry(wpRestClient.getLastSyncTelemetry("voltswitch"));
   };
 
   const liveWpPayload = useMemo(() => {
@@ -72,6 +81,7 @@ export const App: React.FC = () => {
             ledger={ledger}
             rewards={rewards}
             onLedgerUpdate={handleLedgerUpdate}
+            onSyncComplete={refreshTelemetry}
           />
         )}
         {activeView === "trade-catalog" && <TradeCatalogView />}
@@ -81,6 +91,7 @@ export const App: React.FC = () => {
         isOpen={isWpInspectorOpen}
         onClose={() => setIsWpInspectorOpen(false)}
         livePayload={liveWpPayload}
+        syncTelemetry={syncTelemetry}
       />
     </div>
   );

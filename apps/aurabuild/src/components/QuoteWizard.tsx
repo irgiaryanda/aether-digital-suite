@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AuraQuoteSubmission,
   BillOfMaterials,
@@ -26,6 +26,7 @@ interface Props {
   poolHydraulics: PoolHydraulics;
   poolBom: BillOfMaterials;
   onQuoteSubmitted: (quote: AuraQuoteSubmission) => void;
+  onSyncComplete?: () => void;
 }
 
 export const QuoteWizard: React.FC<Props> = (p) => {
@@ -37,26 +38,62 @@ export const QuoteWizard: React.FC<Props> = (p) => {
     p.poolConfig,
     p.poolHydraulics,
     p.poolBom,
-    p.onQuoteSubmitted
+    p.onQuoteSubmitted,
+    p.onSyncComplete
   );
-
-  if (!p.isOpen) return null;
-  const resolution = resolvePostcode(form.postcode);
 
   const handleClose = () => {
     form.resetForm();
     p.onClose();
   };
 
+  useEffect(() => {
+    if (!p.isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [p.isOpen]);
+
+  if (!p.isOpen) return null;
+  const resolution = resolvePostcode(form.postcode);
+
+  const handleNext = () => {
+    if (form.step === 1 && !form.validateStepOne()) {
+      return;
+    }
+    form.setStep((s) => (s + 1) as 2 | 3 | 4);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl max-w-lg w-full border border-aura-border shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm print:hidden"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quote-wizard-title"
+        className="bg-white rounded-xl max-w-lg w-full border border-aura-border shadow-2xl flex flex-col max-h-[88vh] overflow-hidden"
+      >
         <div className="px-4 py-3 border-b border-aura-border flex items-center justify-between bg-aura-subtle">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-aura-cyan">Engineering Measure</span>
-            <h2 className="text-sm font-display font-bold text-aura-text">Book Site Measure & Sign-Off</h2>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-aura-cyan">
+              Step {form.step} of 4 &middot; Engineering Measure
+            </span>
+            <h2 id="quote-wizard-title" className="text-sm font-display font-bold text-aura-text">
+              Book Site Measure & Sign-Off
+            </h2>
           </div>
-          <button type="button" onClick={handleClose} className="p-1 rounded text-aura-text-muted hover:text-aura-text">
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Close Quote Wizard"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1 rounded text-aura-text-muted hover:text-aura-text"
+          >
             <X size={18} />
           </button>
         </div>
@@ -69,9 +106,13 @@ export const QuoteWizard: React.FC<Props> = (p) => {
               </div>
               <h3 className="font-display font-bold text-base text-aura-text">Site Measure Reserved</h3>
               <p className="text-xs text-aura-text-muted">
-                Reference: <span className="font-mono font-bold text-aura-cyan">{form.submittedQuote.bom.quoteReference}</span>
+                Reference: <span className="font-mono font-bold text-aura-cyan">{form.submittedQuote.id}</span>
               </p>
-              <button type="button" onClick={handleClose} className="mt-2 px-4 py-1.5 rounded-lg bg-aura-monument text-white text-xs font-semibold">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="mt-2 px-4 py-2 rounded-lg bg-aura-monument text-white text-xs font-semibold"
+              >
                 Close
               </button>
             </div>
@@ -89,6 +130,7 @@ export const QuoteWizard: React.FC<Props> = (p) => {
                   setSiteAddress={form.setSiteAddress}
                   postcode={form.postcode}
                   setPostcode={form.setPostcode}
+                  errors={form.validationErrors}
                 />
               )}
               {form.step === 2 && <QuoteStepTwo accessNotes={form.accessNotes} setAccessNotes={form.setAccessNotes} />}
@@ -121,7 +163,7 @@ export const QuoteWizard: React.FC<Props> = (p) => {
               <button
                 type="button"
                 onClick={() => form.setStep((s) => (s - 1) as 1 | 2 | 3)}
-                className="px-3 py-1.5 rounded-lg border border-aura-border text-xs font-semibold hover:bg-white flex items-center space-x-1"
+                className="min-h-[38px] px-3 py-1.5 rounded-lg border border-aura-border text-xs font-semibold hover:bg-white flex items-center space-x-1"
               >
                 <ArrowLeft size={14} />
                 <span>Back</span>
@@ -131,8 +173,8 @@ export const QuoteWizard: React.FC<Props> = (p) => {
             {form.step < 4 ? (
               <button
                 type="button"
-                onClick={() => form.setStep((s) => (s + 1) as 2 | 3 | 4)}
-                className="px-4 py-1.5 rounded-lg bg-aura-cyan text-white text-xs font-semibold hover:bg-[#0c627a] flex items-center space-x-1"
+                onClick={handleNext}
+                className="min-h-[38px] px-4 py-1.5 rounded-lg bg-aura-cyan text-white text-xs font-semibold hover:bg-[#0c627a] flex items-center space-x-1"
               >
                 <span>Next</span>
                 <ArrowRight size={14} />
@@ -142,9 +184,9 @@ export const QuoteWizard: React.FC<Props> = (p) => {
                 type="button"
                 disabled={form.isSubmitting}
                 onClick={form.handleSubmit}
-                className="px-4 py-1.5 rounded-lg bg-aura-cyan text-white text-xs font-bold hover:bg-[#0c627a] disabled:opacity-50"
+                className="min-h-[38px] px-4 py-1.5 rounded-lg bg-aura-cyan text-white text-xs font-bold hover:bg-[#0c627a] disabled:opacity-50"
               >
-                {form.isSubmitting ? "Locking..." : "Confirm & Lock Quote"}
+                {form.isSubmitting ? "Syncing Quote..." : "Confirm & Lock Quote"}
               </button>
             )}
           </div>

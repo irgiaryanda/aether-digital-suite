@@ -10,6 +10,10 @@ interface PostcodeRule {
 }
 
 const POSTCODE_REGISTRY: PostcodeRule[] = [
+  // Australian Capital Territory placed before NSW catch-all 2051-2999
+  { min: 2600, max: 2618, state: "ACT", suburb: "Canberra Central", windRegion: "A", leadTimeWeeks: 3 },
+  { min: 2900, max: 2920, state: "ACT", suburb: "Tuggeranong & Gungahlin", windRegion: "A", leadTimeWeeks: 3 },
+
   // New South Wales
   { min: 2000, max: 2050, state: "NSW", suburb: "Sydney CBD & Inner East", windRegion: "A", leadTimeWeeks: 3 },
   { min: 2088, max: 2090, state: "NSW", suburb: "Mosman & Neutral Bay", windRegion: "A", leadTimeWeeks: 3 },
@@ -44,12 +48,6 @@ const POSTCODE_REGISTRY: PostcodeRule[] = [
 
   // Tasmania
   { min: 7000, max: 7499, state: "TAS", suburb: "Tasmania", windRegion: "A", leadTimeWeeks: 4 },
-
-  // Australian Capital Territory
-  { min: 2600, max: 2618, state: "ACT", suburb: "Canberra Central", windRegion: "A", leadTimeWeeks: 3 },
-
-  // Northern Territory
-  { min: "0800" as unknown as number, max: "0899" as unknown as number, state: "NT", suburb: "Darwin Cyclonic", windRegion: "C", leadTimeWeeks: 6 },
 ];
 
 export function resolvePostcode(postcodeRaw: string): PostcodeResolution {
@@ -67,8 +65,7 @@ export function resolvePostcode(postcodeRaw: string): PostcodeResolution {
     };
   }
 
-  // Handle NT postcodes starting with 08
-  if (numericStr.startsWith("08")) {
+  if (numericStr.startsWith("08") || numericStr.startsWith("09")) {
     return {
       postcode: numericStr,
       suburb: "Darwin Coastal Area",
@@ -98,7 +95,6 @@ export function resolvePostcode(postcodeRaw: string): PostcodeResolution {
     }
   }
 
-  // Fallback based on leading digit
   const firstDigit = numericStr[0];
   const stateByDigit: Record<string, AustralianState> = {
     "2": "NSW",

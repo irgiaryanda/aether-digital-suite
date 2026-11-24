@@ -14,7 +14,35 @@
   }
 }
 
-/* Custom architectural scrollbars */
+@keyframes auraShimmer {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.65; }
+}
+
+.aura-water-shimmer {
+  animation: auraShimmer 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-door-motion {
+    transition: none !important;
+  }
+  .aura-water-shimmer {
+    animation: none !important;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
