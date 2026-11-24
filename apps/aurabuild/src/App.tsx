@@ -91,7 +91,15 @@ export const App: React.FC = () => {
   }, [productType, garageConfig, garageEngineering, garageBom, poolConfig, poolHydraulics, poolBom]);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1D20] flex flex-col font-sans">
+    <div className="min-h-[100dvh] bg-aura-bg text-aura-text flex flex-col font-sans relative">
+      <div className="aura-grain-overlay" aria-hidden="true" />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-full focus:bg-aura-text focus:text-white focus:text-xs focus:font-semibold"
+      >
+        Skip to studio configurator
+      </a>
+
       <Header
         productType={productType}
         onProductTypeChange={setProductType}
@@ -102,7 +110,20 @@ export const App: React.FC = () => {
         savedQuotesCount={savedQuotes.length}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 print:hidden">
+      <main id="main-content" className="flex-1 max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 print:hidden">
+        <div className="mb-6 max-w-2xl">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-aura-text leading-tight">
+            {productType === "GARAGE_DOOR"
+              ? "Architectural Sectional Door Configurator"
+              : "Cantilevered Concrete Pool Configurator"}
+          </h1>
+          <p className="text-sm text-aura-text-muted mt-1.5 leading-relaxed">
+            {productType === "GARAGE_DOOR"
+              ? "Configure opening dimensions, AS/NZS 4505 wind bracing, cladding finishes, and GST pricing in real time."
+              : "Specify basin geometry, AS 1926 hydraulic turnover sizing, stone coping, and itemized GST pricing."}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-7 xl:col-span-8 lg:sticky lg:top-24">
             <AuraVisualizer

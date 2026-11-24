@@ -64,7 +64,15 @@ export const App: React.FC = () => {
   }, [contractor, ledger]);
 
   return (
-    <div className="min-h-screen bg-volt-base text-gray-100 flex flex-col font-sans">
+    <div className="min-h-[100dvh] bg-volt-base text-volt-ink flex flex-col font-sans relative">
+      <div className="volt-grain-overlay" aria-hidden="true" />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-volt-amber focus:text-volt-base focus:rounded-full focus:text-xs focus:font-bold"
+      >
+        Skip to main content
+      </a>
+
       <Header
         contractor={contractor}
         activeView={activeView}
@@ -73,7 +81,7 @@ export const App: React.FC = () => {
         onOpenWpInspector={() => setIsWpInspectorOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main id="main-content" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeView === "sku-switch" && <SkuSwitcherView />}
         {activeView === "loyalty-claims" && (
           <LoyaltyPortalView

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ArrowsClockwise,
-  Clock,
-  Code,
-  Kanban,
-  Receipt,
-} from "@phosphor-icons/react";
+import { ArrowsClockwise, Clock, Code, Icon as PhosphorIcon, Kanban, Receipt } from "@phosphor-icons/react";
 
 interface HeaderProps {
   activeView: "ledger" | "kanban" | "analytics";
@@ -24,64 +18,70 @@ export const Header: React.FC<HeaderProps> = ({
   onResetDemoData,
   onOpenWpInspector,
 }) => {
+  const navItems: {
+    id: "ledger" | "kanban" | "analytics";
+    label: string;
+    mobileLabel: string;
+    icon: PhosphorIcon;
+  }[] = [
+    { id: "ledger", label: "Timesheets", mobileLabel: "Timesheets", icon: Clock },
+    { id: "kanban", label: "Kanban", mobileLabel: "Kanban", icon: Kanban },
+    { id: "analytics", label: "Invoice & Util", mobileLabel: "Invoice", icon: Receipt },
+  ];
+
   return (
-    <header className="bg-chronos-surface border-b border-white/10 sticky top-0 z-40 shadow-xl print:hidden">
+    <header className="bg-[#0B0D12]/90 backdrop-blur-md border-b border-white/[0.08] sticky top-0 z-40 print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-chronos-indigo flex items-center justify-center text-white font-display font-bold text-lg">
+        <div className="flex items-center justify-between h-16 gap-3">
+          <div className="flex items-center space-x-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-chronos-green flex items-center justify-center text-chronos-canvas font-display font-extrabold text-base flex-shrink-0 shadow-sm">
               CF
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center space-x-2">
-                <span className="font-display font-bold text-base text-white">ChronosFlow</span>
-                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
+                <span className="font-display font-bold text-base tracking-tight text-chronos-ink">
+                  ChronosFlow
+                </span>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-chronos-green border border-emerald-500/30">
                   AGENCY OPS
                 </span>
               </div>
-              <p className="text-[11px] text-gray-400 hidden sm:block">Time & Retainer Intelligence</p>
+              <p className="text-[11px] text-chronos-muted hidden sm:block truncate">
+                Time & Retainer Intelligence
+              </p>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center bg-chronos-canvas p-1 rounded-lg border border-white/10">
-            <button
-              type="button"
-              onClick={() => onViewChange("ledger")}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold ${
-                activeView === "ledger" ? "bg-chronos-card text-white shadow border border-white/10" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Clock size={14} weight={activeView === "ledger" ? "fill" : "regular"} />
-              <span>Timesheets</span>
-            </button>
+          <nav
+            aria-label="Primary sections"
+            className="hidden md:flex items-center bg-chronos-tray p-1 rounded-full border border-white/[0.08]"
+          >
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onViewChange(item.id)}
+                  className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ease-spring active:scale-[0.98] whitespace-nowrap ${
+                    isActive
+                      ? "bg-chronos-elevated text-chronos-green border border-white/[0.08] shadow-sm"
+                      : "text-chronos-muted hover:text-chronos-ink"
+                  }`}
+                >
+                  <Icon size={14} weight={isActive ? "fill" : "regular"} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
 
-            <button
-              type="button"
-              onClick={() => onViewChange("kanban")}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold ${
-                activeView === "kanban" ? "bg-chronos-card text-white shadow border border-white/10" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Kanban size={14} weight={activeView === "kanban" ? "fill" : "regular"} />
-              <span>Kanban</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onViewChange("analytics")}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-semibold ${
-                activeView === "analytics" ? "bg-chronos-card text-white shadow border border-white/10" : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Receipt size={14} weight={activeView === "analytics" ? "fill" : "regular"} />
-              <span>Invoice & Util</span>
-            </button>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <div className="hidden lg:flex items-center space-x-2 px-2.5 py-1 rounded-lg border border-white/10 bg-chronos-card text-xs font-mono">
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <div className="hidden lg:flex items-center space-x-2.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-chronos-tray text-xs font-mono">
               <span className="text-chronos-green font-bold tabular-nums">{utilizationPercent}% Util</span>
-              <span className="border-l border-white/10 pl-2 text-white font-bold tabular-nums">{totalLoggedHours}h</span>
+              <span className="h-3 w-px bg-white/10" aria-hidden="true" />
+              <span className="text-chronos-ink font-bold tabular-nums">{totalLoggedHours}h</span>
             </div>
 
             <button
@@ -89,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onResetDemoData}
               title="Reset Demo Data"
               aria-label="Reset Demo Data"
-              className="min-h-[40px] min-w-[40px] flex items-center justify-center p-2 rounded-lg text-gray-400 hover:text-white hover:bg-chronos-card border border-white/10 text-xs font-mono"
+              className="min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full text-chronos-muted hover:text-chronos-ink bg-chronos-tray hover:bg-chronos-elevated border border-white/[0.08] transition-all duration-200 ease-spring active:scale-[0.98]"
             >
               <ArrowsClockwise size={15} />
             </button>
@@ -98,7 +98,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenWpInspector}
               aria-label="Inspect WordPress Agency API and Capabilities"
-              className="min-h-[40px] min-w-[40px] p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-xs font-bold font-mono flex items-center justify-center space-x-1"
+              className="min-h-[38px] min-w-[38px] p-1.5 sm:px-3 sm:py-1.5 rounded-full text-chronos-green bg-chronos-tray hover:bg-chronos-elevated border border-emerald-500/35 text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all duration-200 ease-spring active:scale-[0.98] whitespace-nowrap"
             >
               <Code size={15} />
               <span className="hidden sm:inline">WP Agency API</span>
@@ -106,39 +106,30 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Mobile View Switcher */}
-        <div className="flex md:hidden items-center bg-chronos-canvas p-1 rounded-lg border border-white/10 mb-2.5 gap-1">
-          <button
-            type="button"
-            onClick={() => onViewChange("ledger")}
-            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
-              activeView === "ledger" ? "bg-chronos-card text-white border border-white/10" : "text-gray-400"
-            }`}
-          >
-            <Clock size={13} />
-            <span>Timesheets</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewChange("kanban")}
-            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
-              activeView === "kanban" ? "bg-chronos-card text-white border border-white/10" : "text-gray-400"
-            }`}
-          >
-            <Kanban size={13} />
-            <span>Kanban</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewChange("analytics")}
-            className={`flex-1 min-h-[40px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded text-[11px] font-semibold ${
-              activeView === "analytics" ? "bg-chronos-card text-white border border-white/10" : "text-gray-400"
-            }`}
-          >
-            <Receipt size={13} />
-            <span>Invoice</span>
-          </button>
-        </div>
+        <nav
+          aria-label="Mobile sections"
+          className="flex md:hidden items-center bg-chronos-tray p-1 rounded-full border border-white/[0.08] mb-3 gap-1"
+        >
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activeView === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => onViewChange(item.id)}
+                className={`flex-1 min-h-[38px] flex items-center justify-center space-x-1 px-2 py-1.5 rounded-full text-[11px] font-semibold transition-all duration-200 ${
+                  isActive
+                    ? "bg-chronos-elevated text-chronos-green border border-white/[0.08]"
+                    : "text-chronos-muted"
+                }`}
+              >
+                <Icon size={13} weight={isActive ? "fill" : "regular"} />
+                <span>{item.mobileLabel}</span>
+              </button>
+            );
+          })}
+        </nav>
       </div>
     </header>
   );

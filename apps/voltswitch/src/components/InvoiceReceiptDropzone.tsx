@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AustralianWholesaler } from "@aether/core-engine";
-import { UploadSimple, FileText, Image as ImageIcon, Trash, Sparkle } from "@phosphor-icons/react";
+import { UploadSimple, FileText, Image as ImageIcon, Trash, Lightning } from "@phosphor-icons/react";
 
 export interface AttachedReceipt {
   name: string;
@@ -69,14 +69,14 @@ export const InvoiceReceiptDropzone: React.FC<Props> = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-gray-400">Wholesaler Tax Invoice Scan</span>
+        <span className="text-volt-muted font-medium">Wholesaler Tax Invoice Scan</span>
         <button
           type="button"
           onClick={handleSimulate}
-          className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 text-volt-amber border border-amber-500/30 flex items-center space-x-1 font-semibold"
+          className="text-[11px] px-2.5 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-volt-amber border border-amber-500/30 flex items-center space-x-1 font-semibold transition-colors duration-200"
         >
-          <Sparkle size={11} weight="fill" />
-          <span>Simulate OCR Scan</span>
+          <Lightning size={12} weight="fill" />
+          <span>Load OCR Sample</span>
         </button>
       </div>
 
@@ -108,46 +108,46 @@ export const InvoiceReceiptDropzone: React.FC<Props> = ({
               inputRef.current?.click();
             }
           }}
-          className={`p-3 rounded-lg border border-dashed cursor-pointer text-center transition-colors ${
+          className={`p-3.5 rounded-[12px] border border-dashed cursor-pointer text-center transition-colors duration-200 ${
             isDragging
               ? "border-volt-amber bg-amber-500/10 text-volt-amber"
-              : "border-volt-border bg-volt-base hover:border-gray-500 text-gray-400"
+              : "border-white/[0.14] bg-volt-recessed hover:border-white/[0.28] text-volt-muted"
           }`}
         >
           <UploadSimple size={18} className="mx-auto mb-1 text-volt-amber" />
-          <div className="text-[11px] text-white font-semibold">
+          <div className="text-xs text-volt-ink font-semibold">
             Drop Wholesaler Receipt PDF or Photo
           </div>
-          <div className="text-[10px] text-gray-500">
+          <div className="text-[11px] text-volt-dim mt-0.5">
             Supports PDF, JPG, PNG up to 10MB
           </div>
         </div>
       ) : (
-        <div className="p-2.5 rounded-lg border border-emerald-500/40 bg-emerald-950/30 flex items-center justify-between gap-2">
+        <div className="p-3 rounded-[12px] border border-emerald-500/40 bg-emerald-950/30 flex items-center justify-between gap-2">
           <div className="flex items-center space-x-2.5 min-w-0">
             {attachedFile.previewUrl ? (
               <img
                 src={attachedFile.previewUrl}
                 alt="Uploaded invoice preview"
-                className="w-9 h-9 rounded object-cover border border-white/10 flex-shrink-0"
+                className="w-9 h-9 rounded-[8px] object-cover border border-white/10 flex-shrink-0"
               />
             ) : attachedFile.type.includes("pdf") ? (
-              <FileText size={24} className="text-volt-amber flex-shrink-0" weight="fill" />
+              <FileText size={22} className="text-volt-amber flex-shrink-0" weight="fill" />
             ) : (
-              <ImageIcon size={24} className="text-emerald-400 flex-shrink-0" />
+              <ImageIcon size={22} className="text-emerald-400 flex-shrink-0" />
             )}
             <div className="min-w-0">
-              <div className="text-[11px] font-bold text-white truncate">{attachedFile.name}</div>
-              <div className="text-[10px] text-emerald-400">{attachedFile.sizeKb} KB verified</div>
+              <div className="text-xs font-mono font-bold text-volt-ink truncate">{attachedFile.name}</div>
+              <div className="text-[11px] text-emerald-400 font-mono tabular-nums">{attachedFile.sizeKb} KB verified</div>
             </div>
           </div>
           <button
             type="button"
             onClick={() => onAttach(null)}
             aria-label="Remove Attached Receipt"
-            className="p-1.5 rounded text-gray-400 hover:text-red-400"
+            className="p-1.5 rounded-[8px] text-volt-muted hover:text-red-400 transition-colors"
           >
-            <Trash size={14} />
+            <Trash size={15} />
           </button>
         </div>
       )}

@@ -22,7 +22,7 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-xs flex justify-end print:hidden"
+      className="fixed inset-0 z-50 overflow-hidden bg-black/40 backdrop-blur-sm flex justify-end print:hidden"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -35,18 +35,18 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
       >
         <div className="px-5 py-4 border-b border-aura-border flex items-center justify-between bg-aura-subtle">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-aura-cyan">
-              Engineering Quotations
+            <span className="text-[11px] font-semibold text-aura-cyan block">
+              Architectural Quotations
             </span>
             <h2 id="saved-quotes-title" className="text-sm font-display font-bold text-aura-text">
-              Saved Architectural Quotes ({quotes.length})
+              Saved Quotes ({quotes.length})
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close Saved Quotes Drawer"
-            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1.5 rounded-lg text-aura-text-muted hover:text-aura-text hover:bg-white transition-colors"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1.5 rounded-full text-aura-text-muted hover:text-aura-text hover:bg-white transition-colors"
           >
             <X size={18} />
           </button>
@@ -61,30 +61,30 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
             quotes.map((q) => (
               <div
                 key={q.id}
-                className="p-3.5 bg-aura-subtle rounded-xl border border-aura-border hover:border-aura-cyan/50 transition-colors space-y-2 text-xs"
+                className="p-4 bg-aura-subtle rounded-[14px] border border-aura-border hover:border-aura-cyan/50 transition-colors space-y-2.5 text-xs"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-aura-cyan">
                     {q.id}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-100 text-aura-cyan font-semibold">
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-aura-cyan/[0.12] text-aura-cyan font-semibold">
                     {q.status.replace(/_/g, " ")}
                   </span>
                 </div>
 
                 <div className="space-y-1">
                   <div className="font-bold text-aura-text">{q.customerName}</div>
-                  <div className="text-aura-text-muted flex items-center space-x-1 text-[11px]">
+                  <div className="text-aura-text-muted flex items-center space-x-1.5 text-[11px]">
                     <MapPin size={13} className="text-aura-text-dim" />
                     <span>{q.siteAddress}, {q.postcode}</span>
                   </div>
-                  <div className="text-aura-text-muted flex items-center space-x-1 text-[11px]">
+                  <div className="text-aura-text-muted flex items-center space-x-1.5 text-[11px]">
                     <CalendarBlank size={13} className="text-aura-text-dim" />
                     <span>Submitted: {new Date(q.submittedAt).toLocaleDateString("en-AU")}</span>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-aura-border/60 flex items-center justify-between">
+                <div className="pt-2.5 border-t border-aura-border flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-aura-text tabular-nums">
                     ${q.bom.totalIncGstAud.toLocaleString(undefined, { minimumFractionDigits: 2 })} AUD
                   </span>
@@ -94,10 +94,9 @@ export const SavedQuotesDrawer: React.FC<SavedQuotesDrawerProps> = ({ isOpen, on
                       onClose();
                       setTimeout(() => window.print(), 80);
                     }}
-                    className="p-1.5 rounded text-aura-text-dim hover:text-aura-cyan hover:bg-white transition-colors flex items-center space-x-1 text-[11px] font-medium"
-                    title="Print Specification"
+                    className="px-3 py-1 rounded-full border border-aura-border bg-white text-aura-text hover:text-aura-cyan hover:border-aura-cyan transition-colors flex items-center space-x-1.5 text-[11px] font-semibold"
                   >
-                    <Printer size={14} />
+                    <Printer size={13} />
                     <span>Print Spec</span>
                   </button>
                 </div>

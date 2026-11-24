@@ -17,17 +17,17 @@ export const WholesalerSelector: React.FC<Props> = ({
   isValidAbn,
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
         {VERIFIED_AUSTRALIAN_WHOLESALERS.map((w) => (
           <button
             key={w.id}
             type="button"
             onClick={() => onSelect(w.id)}
-            className={`p-1.5 rounded border text-left truncate ${
+            className={`px-2 py-2 rounded-[10px] border text-left truncate text-[11px] font-semibold transition-all duration-200 ease-spring active:scale-[0.98] ${
               selectedWholesaler === w.id
-                ? "bg-volt-elevated border-volt-amber text-volt-amber font-bold"
-                : "bg-volt-base border-volt-border text-gray-400"
+                ? "bg-volt-elevated border-volt-amber/70 text-volt-amber"
+                : "bg-volt-recessed border-white/[0.08] text-volt-muted hover:text-volt-ink"
             }`}
           >
             {w.name.split(" ")[0]}
@@ -36,17 +36,26 @@ export const WholesalerSelector: React.FC<Props> = ({
       </div>
 
       <div>
-        <div className="flex justify-between mb-0.5">
-          <span className="text-gray-400">Wholesaler ABN</span>
-          <span className={isValidAbn ? "text-emerald-400 font-bold" : "text-red-400 font-bold"}>
+        <div className="flex justify-between items-center mb-1">
+          <label htmlFor="volt-wholesaler-abn" className="text-volt-muted font-medium">
+            Wholesaler ABN
+          </label>
+          <span
+            className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full ${
+              isValidAbn
+                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                : "bg-red-500/10 text-red-400 border border-red-500/30"
+            }`}
+          >
             {isValidAbn ? "VALID MOD-89" : "INVALID"}
           </span>
         </div>
         <input
+          id="volt-wholesaler-abn"
           type="text"
           value={abn}
           onChange={(e) => onAbnChange(e.target.value)}
-          className="w-full px-2 py-1 bg-volt-base border border-volt-border rounded text-white"
+          className="w-full px-3 py-2 bg-volt-recessed border border-white/[0.08] rounded-[10px] font-mono tabular-nums text-volt-ink focus:border-volt-amber focus:outline-none transition-colors duration-200"
         />
       </div>
     </div>

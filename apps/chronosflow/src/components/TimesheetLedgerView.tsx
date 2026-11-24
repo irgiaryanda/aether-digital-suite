@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { ChronosProject, TimesheetEntry } from "@aether/core-engine";
 import { ManualEntryForm } from "./ManualEntryForm";
-import { Clock, Trash } from "@phosphor-icons/react";
+import { ArrowsClockwise, Clock, Trash } from "@phosphor-icons/react";
 
 interface Props {
   timesheets: TimesheetEntry[];
@@ -38,82 +38,114 @@ export const TimesheetLedgerView: React.FC<Props> = ({
   }, [filtered]);
 
   return (
-    <div className="space-y-5 font-mono text-xs">
+    <div className="space-y-6 text-xs">
       <ManualEntryForm projects={projects} onAddEntry={onAddEntry} />
 
-      <div className="bg-chronos-surface border border-white/10 rounded-xl p-4 shadow-xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
-          <div className="flex items-center space-x-2">
-            <Clock size={18} className="text-chronos-indigo" weight="fill" />
-            <h3 className="font-bold text-white text-sm">Agency Timesheet Ledger ({filtered.length} Entries)</h3>
-          </div>
+      <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+        <div className="bg-chronos-card rounded-[14px] p-5 border border-white/[0.06] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-3.5">
+            <div className="flex items-center space-x-2">
+              <Clock size={18} className="text-chronos-green" weight="fill" />
+              <h2 className="font-display font-bold text-chronos-ink text-sm tracking-tight">
+                Agency Timesheet Ledger ({filtered.length} Entries)
+              </h2>
+            </div>
 
-          <div className="flex items-center space-x-3">
-            <select
-              value={selectedProjectId}
-              onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="px-2.5 py-1 bg-chronos-canvas border border-white/10 rounded text-white text-[11px]"
-            >
-              <option value="ALL">All Client Projects</option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>{p.code}</option>
-              ))}
-            </select>
+            <div className="flex flex-wrap items-center gap-3">
+              <select
+                aria-label="Filter timesheets by project"
+                value={selectedProjectId}
+                onChange={(e) => setSelectedProjectId(e.target.value)}
+                className="px-3 py-1.5 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink text-xs focus:border-chronos-green focus:outline-none"
+              >
+                <option value="ALL">All Client Projects</option>
+                {projects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.code}
+                  </option>
+                ))}
+              </select>
 
-            <span className="text-gray-300 bg-chronos-card px-2.5 py-1 rounded border border-white/10">
-              <strong className="text-white tabular-nums">{summary.hours}h</strong> logged &middot;{" "}
-              <strong className="text-chronos-green tabular-nums">${summary.billableAud.toLocaleString()} AUD</strong>
-            </span>
-          </div>
-        </div>
-
-        <div className="overflow-x-auto max-h-[480px] divide-y divide-white/5">
-          {filtered.map((entry) => {
-            const hoursVal = Math.round((entry.durationSeconds / 3600) * 10) / 10;
-            const lineAud = Math.round(hoursVal * entry.hourlyRateAud * 100) / 100;
-            const proj = projects.find((p) => p.id === entry.projectId);
-
-            return (
-              <div key={entry.id} className="py-2.5 flex items-start justify-between gap-3 hover:bg-white/[0.02]">
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-white text-xs">{proj?.code ?? "PRJ"}</span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-400">
-                      {entry.phaseCategory.replace(/_/g, " ")}
-                    </span>
-                    <span
-                      className={`text-[9px] px-1 rounded ${
-                        entry.isBillable ? "bg-emerald-500/10 text-emerald-400" : "bg-gray-800 text-gray-400"
-                      }`}
-                    >
-                      {entry.isBillable ? "BILLABLE" : "NON-BILL"}
-                    </span>
-                  </div>
-                  <p className="text-gray-300 text-[11px] font-sans">{entry.taskDescription}</p>
-                  <div className="text-[10px] text-gray-500">
-                    {entry.userName} &middot; {new Date(entry.startedAt).toLocaleDateString("en-AU")}
-                  </div>
-                </div>
-
-                <div className="text-right flex items-center space-x-3 flex-shrink-0">
-                  <div>
-                    <span className="font-bold text-white tabular-nums block">{hoursVal} hrs</span>
-                    <span className="text-[10px] text-gray-400 tabular-nums">
-                      ${lineAud.toLocaleString(undefined, { minimumFractionDigits: 2 })} AUD
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onDeleteEntry(entry.id)}
-                    className="p-1 text-gray-500 hover:text-red-400 transition-colors"
-                    title="Delete Record"
-                  >
-                    <Trash size={14} />
-                  </button>
-                </div>
+              <div className="text-chronos-muted bg-chronos-recessed px-3.5 py-1.5 rounded-full border border-white/[0.08] font-mono">
+                <strong className="text-chronos-ink tabular-nums">{summary.hours}h</strong> logged &middot;{" "}
+                <strong className="text-chronos-green tabular-nums">${summary.billableAud.toLocaleString()} AUD</strong>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="py-12 px-4 text-center rounded-[12px] bg-chronos-recessed border border-white/[0.06] space-y-3">
+              <p className="text-sm font-semibold text-chronos-ink">No timesheet entries for this project filter</p>
+              <p className="text-xs text-chronos-muted">
+                Log time using the quick-log form or active timer bar, or show all client retainers.
+              </p>
+              {selectedProjectId !== "ALL" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectId("ALL")}
+                  className="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-chronos-elevated text-chronos-green border border-emerald-500/35 text-xs font-semibold hover:bg-chronos-green hover:text-chronos-canvas transition-all duration-200 ease-spring"
+                >
+                  <ArrowsClockwise size={13} />
+                  <span>Show All Projects</span>
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="overflow-x-auto max-h-[500px] divide-y divide-white/[0.06]">
+              {filtered.map((entry) => {
+                const hoursVal = Math.round((entry.durationSeconds / 3600) * 10) / 10;
+                const lineAud = Math.round(hoursVal * entry.hourlyRateAud * 100) / 100;
+                const proj = projects.find((p) => p.id === entry.projectId);
+
+                return (
+                  <div
+                    key={entry.id}
+                    className="py-3 px-1 flex items-start justify-between gap-3 hover:bg-white/[0.02] transition-colors rounded-[8px]"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-mono font-bold text-chronos-ink text-xs">{proj?.code ?? "PRJ"}</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-chronos-recessed text-chronos-muted border border-white/[0.06]">
+                          {entry.phaseCategory.replace(/_/g, " ")}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                            entry.isBillable
+                              ? "bg-emerald-500/10 text-chronos-green border border-emerald-500/25"
+                              : "bg-chronos-elevated text-chronos-dim"
+                          }`}
+                        >
+                          {entry.isBillable ? "BILLABLE" : "NON-BILL"}
+                        </span>
+                      </div>
+                      <p className="text-chronos-ink text-xs leading-relaxed">{entry.taskDescription}</p>
+                      <div className="text-[11px] font-mono text-chronos-dim">
+                        {entry.userName} &middot; {new Date(entry.startedAt).toLocaleDateString("en-AU")}
+                      </div>
+                    </div>
+
+                    <div className="text-right flex items-center space-x-3 flex-shrink-0">
+                      <div className="font-mono">
+                        <span className="font-bold text-chronos-ink tabular-nums block text-xs">{hoursVal} hrs</span>
+                        <span className="text-[11px] text-chronos-muted tabular-nums">
+                          ${lineAud.toLocaleString(undefined, { minimumFractionDigits: 2 })} AUD
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onDeleteEntry(entry.id)}
+                        aria-label={`Delete timesheet entry ${entry.id}`}
+                        className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-[10px] text-chronos-dim hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        title="Delete Record"
+                      >
+                        <Trash size={15} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

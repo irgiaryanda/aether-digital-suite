@@ -49,110 +49,132 @@ export const RoiCalculatorPanel: React.FC<Props> = ({ sku }) => {
   };
 
   return (
-    <div className="bg-volt-surface rounded-xl border border-volt-border p-4 shadow-lg space-y-4">
-      <div className="flex items-center justify-between border-b border-volt-border pb-3">
-        <div className="flex items-center space-x-2">
-          <Calculator size={18} className="text-volt-amber" weight="fill" />
-          <h3 className="font-bold text-sm text-white font-sans">
-            Commercial Energy & Carbon Payback
-          </h3>
+    <div className="bg-volt-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+      <div className="bg-volt-surface rounded-[14px] p-5 border border-white/[0.06] space-y-5">
+        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3.5">
+          <div className="flex items-center space-x-2.5">
+            <Calculator size={18} className="text-volt-amber" weight="fill" />
+            <h3 className="font-bold text-sm text-volt-ink tracking-tight">
+              Commercial Energy & Carbon Payback
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="px-3.5 py-1.5 rounded-full bg-volt-recessed hover:bg-volt-elevated border border-white/[0.1] text-volt-amber text-xs font-mono font-bold flex items-center space-x-1.5 transition-all duration-200 ease-spring active:scale-[0.98]"
+          >
+            <DownloadSimple size={14} weight="bold" />
+            <span>CSV Export</span>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleExportCsv}
-          className="px-2.5 py-1 rounded bg-volt-elevated hover:bg-volt-base border border-volt-border text-volt-amber text-xs font-mono font-bold flex items-center space-x-1"
-        >
-          <DownloadSimple size={14} />
-          <span>CSV</span>
-        </button>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div>
+            <div className="flex justify-between mb-2">
+              <label htmlFor="roi-qty" className="text-volt-muted font-medium">
+                Fixtures
+              </label>
+              <span className="font-mono text-volt-ink font-bold tabular-nums">{quantity}</span>
+            </div>
+            <input
+              id="roi-qty"
+              type="range"
+              min={10}
+              max={500}
+              step={5}
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+              className="w-full volt-range"
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-2">
+              <label htmlFor="roi-hours" className="text-volt-muted font-medium">
+                Daily Hrs
+              </label>
+              <span className="font-mono text-volt-ink font-bold tabular-nums">{dailyHours}h</span>
+            </div>
+            <input
+              id="roi-hours"
+              type="range"
+              min={4}
+              max={24}
+              step={1}
+              value={dailyHours}
+              onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
+              className="w-full volt-range"
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-2">
+              <label htmlFor="roi-days" className="text-volt-muted font-medium">
+                Days / Yr
+              </label>
+              <span className="font-mono text-volt-ink font-bold tabular-nums">{annualDays}d</span>
+            </div>
+            <input
+              id="roi-days"
+              type="range"
+              min={100}
+              max={365}
+              step={5}
+              value={annualDays}
+              onChange={(e) => setAnnualDays(parseInt(e.target.value, 10))}
+              className="w-full volt-range"
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between mb-2">
+              <label htmlFor="roi-tariff" className="text-volt-muted font-medium">
+                Tariff
+              </label>
+              <span className="font-mono text-volt-ink font-bold tabular-nums">${tariff.toFixed(2)}</span>
+            </div>
+            <input
+              id="roi-tariff"
+              type="range"
+              min={0.15}
+              max={0.65}
+              step={0.01}
+              value={tariff}
+              onChange={(e) => setTariff(parseFloat(e.target.value))}
+              className="w-full volt-range"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <div className="p-3 bg-volt-recessed rounded-[12px] border border-white/[0.06]">
+            <span className="text-[11px] text-volt-muted block">Annual Saved</span>
+            <span className="font-mono font-bold text-sm text-volt-ink tabular-nums mt-0.5 block">
+              {roi.annualKwhSaved.toLocaleString()} kWh
+            </span>
+          </div>
+          <div className="p-3 bg-volt-recessed rounded-[12px] border border-volt-amber/35">
+            <span className="text-[11px] text-volt-amber block font-medium">AUD Saved / Yr</span>
+            <span className="font-mono font-bold text-sm text-volt-amber tabular-nums mt-0.5 block">
+              ${roi.annualAudSaved.toLocaleString()}
+            </span>
+          </div>
+          <div className="p-3 bg-volt-recessed rounded-[12px] border border-emerald-500/35">
+            <span className="text-[11px] text-emerald-400 block font-medium">CO2 Reduction</span>
+            <span className="font-mono font-bold text-sm text-emerald-400 tabular-nums mt-0.5 block">
+              {roi.co2ReductionTonnes} t
+            </span>
+          </div>
+          <div className="p-3 bg-volt-recessed rounded-[12px] border border-white/[0.08]">
+            <span className="text-[11px] text-volt-muted block">Payback Window</span>
+            <span className="font-mono font-bold text-sm text-volt-ink tabular-nums mt-0.5 block">
+              {roi.paybackPeriodMonths} mos
+            </span>
+          </div>
+        </div>
+
+        <RoiPaybackChart roi={roi} />
       </div>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-400">Qty</span>
-            <span className="text-white font-bold tabular-nums">{quantity}</span>
-          </div>
-          <input
-            type="range"
-            min={10}
-            max={500}
-            step={5}
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
-            className="w-full accent-volt-amber"
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-400">Daily Hrs</span>
-            <span className="text-white font-bold tabular-nums">{dailyHours}h</span>
-          </div>
-          <input
-            type="range"
-            min={4}
-            max={24}
-            step={1}
-            value={dailyHours}
-            onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
-            className="w-full accent-volt-amber"
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-400">Days/Yr</span>
-            <span className="text-white font-bold tabular-nums">{annualDays}d</span>
-          </div>
-          <input
-            type="range"
-            min={100}
-            max={365}
-            step={5}
-            value={annualDays}
-            onChange={(e) => setAnnualDays(parseInt(e.target.value, 10))}
-            className="w-full accent-volt-amber"
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-gray-400">Tariff</span>
-            <span className="text-white font-bold tabular-nums">${tariff.toFixed(2)}</span>
-          </div>
-          <input
-            type="range"
-            min={0.15}
-            max={0.65}
-            step={0.01}
-            value={tariff}
-            onChange={(e) => setTariff(parseFloat(e.target.value))}
-            className="w-full accent-volt-amber"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-        <div className="p-2.5 bg-volt-base rounded border border-volt-border">
-          <span className="text-[10px] text-gray-400 block">Annual Saved</span>
-          <span className="font-bold text-white tabular-nums">{roi.annualKwhSaved.toLocaleString()} kWh</span>
-        </div>
-        <div className="p-2.5 bg-volt-base rounded border border-amber-500/40">
-          <span className="text-[10px] text-volt-amber block">AUD Saved / Yr</span>
-          <span className="font-bold text-volt-amber tabular-nums">${roi.annualAudSaved.toLocaleString()}</span>
-        </div>
-        <div className="p-2.5 bg-volt-base rounded border border-emerald-500/40">
-          <span className="text-[10px] text-emerald-400 block">CO2 Reduction</span>
-          <span className="font-bold text-emerald-400 tabular-nums">{roi.co2ReductionTonnes} t</span>
-        </div>
-        <div className="p-2.5 bg-volt-base rounded border border-cyan-500/40">
-          <span className="text-[10px] text-cyan-400 block">Payback</span>
-          <span className="font-bold text-cyan-400 tabular-nums">{roi.paybackPeriodMonths} mos</span>
-        </div>
-      </div>
-
-      <RoiPaybackChart roi={roi} />
     </div>
   );
 };

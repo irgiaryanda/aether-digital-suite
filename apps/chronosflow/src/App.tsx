@@ -52,7 +52,15 @@ export const App: React.FC = () => {
   }, [state.activeTimer, state.timesheets]);
 
   return (
-    <div className="min-h-screen bg-chronos-canvas text-gray-100 flex flex-col font-sans print:bg-white print:text-black">
+    <div className="min-h-[100dvh] bg-chronos-canvas text-chronos-ink flex flex-col font-sans relative print:bg-white print:text-black">
+      <div className="chronos-grain-overlay" aria-hidden="true" />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-chronos-green focus:text-chronos-canvas focus:rounded-full focus:text-xs focus:font-bold print:hidden"
+      >
+        Skip to main content
+      </a>
+
       <Header
         activeView={activeView}
         onViewChange={setActiveView}
@@ -62,7 +70,10 @@ export const App: React.FC = () => {
         onOpenWpInspector={() => setIsWpOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6 print:p-0 print:space-y-0">
+      <main
+        id="main-content"
+        className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 print:p-0 print:space-y-0"
+      >
         <ActiveTimerBar
           projects={state.projects}
           timerState={state.activeTimer}

@@ -40,7 +40,6 @@ export const LuxuryPoolSvg: React.FC<LuxuryPoolSvgProps> = ({
   const water = interiorPaletteMap[config.interiorFinish];
   const ledGlow = ledGlowMap[config.ledColor];
 
-  // Dynamic isometric coordinates driven by lengthMm, widthMm, and depth
   const lenNorm = Math.min(1, Math.max(0, (config.lengthMm - 5000) / 7000));
   const widNorm = Math.min(1, Math.max(0, (config.widthMm - 2500) / 2500));
   const depthDrop = Math.round(28 + ((config.deepDepthMm - 1600) / 400) * 16);
@@ -70,7 +69,6 @@ export const LuxuryPoolSvg: React.FC<LuxuryPoolSvgProps> = ({
   const copingPts = [pt(-1, -1, 16), pt(1, -1, 16), pt(1, 1, 16), pt(-1, 1, 16)];
   const waterPts = [pt(-1, -1, 0), pt(1, -1, 0), pt(1, 1, 0), pt(-1, 1, 0)];
 
-  // Shallow entry shelf proportional to shallowDepthMm
   const stepEnd = -0.55;
   const shelfPts = [
     waterPts[0]!,
@@ -79,7 +77,6 @@ export const LuxuryPoolSvg: React.FC<LuxuryPoolSvgProps> = ({
     waterPts[3]!,
   ];
 
-  // Cantilevered horizon apron
   const cantLeft = deckPts[3]!;
   const cantRight = deckPts[2]!;
   const cantileverPts = [
@@ -105,158 +102,159 @@ export const LuxuryPoolSvg: React.FC<LuxuryPoolSvgProps> = ({
           <stop offset="100%" stopColor={water.deep} />
         </linearGradient>
 
+        <linearGradient id="deckGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={isNightMode ? "#252B34" : "#F0ECE4"} />
+          <stop offset="100%" stopColor={isNightMode ? "#171B22" : "#DCD6CA"} />
+        </linearGradient>
+
         <filter id="underwaterGlow" x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="9" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
 
-      {/* Architectural Deck Surround */}
-      <polygon
-        points={toPoints(deckPts)}
-        fill={isNightMode ? "#1E2228" : "#EAE4D9"}
-        stroke="#BDB5A7"
-        strokeWidth="1.5"
-      />
-
-      {/* Cantilevered Horizon Drop Shadow */}
-      {config.cantileverEdge && (
+      <g id="layer-structure">
         <polygon
-          points={toPoints(cantileverPts)}
-          fill="#1A1D20"
-          opacity={isNightMode ? "0.92" : "0.42"}
+          points={toPoints(deckPts)}
+          fill="url(#deckGrad)"
+          stroke={isNightMode ? "#374151" : "#B5AEA0"}
+          strokeWidth="2.5"
         />
-      )}
 
-      {/* Coping Border */}
-      <polygon
-        points={toPoints(copingPts)}
-        fill={coping.fill}
-        stroke={coping.stroke}
-        strokeWidth="3.5"
-      />
+        {config.cantileverEdge && (
+          <polygon
+            points={toPoints(cantileverPts)}
+            fill="#14181E"
+            opacity={isNightMode ? "0.92" : "0.45"}
+          />
+        )}
 
-      {/* Water Surface */}
-      <polygon points={toPoints(waterPts)} fill="url(#poolWaterGrad)" opacity="0.94" />
-
-      {/* Waterline Ceramic Specular Edge */}
-      <polyline
-        points={toPoints([waterPts[0]!, waterPts[1]!, waterPts[2]!])}
-        stroke="#ADE8F4"
-        strokeWidth="2.5"
-        fill="none"
-        opacity="0.85"
-      />
-
-      {/* Shallow Wading Shelf */}
-      <polygon
-        points={toPoints(shelfPts)}
-        fill="#90E0EF"
-        opacity="0.45"
-        stroke="#0077B6"
-        strokeWidth="1"
-      />
-
-      {/* Caustic Water Shimmer */}
-      <g className="aura-water-shimmer" opacity="0.35">
-        <line
-          x1={Math.round((waterPts[0]!.x + waterPts[1]!.x) / 2 - 45)}
-          y1={cy - 18}
-          x2={Math.round((waterPts[0]!.x + waterPts[1]!.x) / 2 + 65)}
-          y2={cy - 36}
-          stroke="#E0F7FA"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <line
-          x1={cx - 30}
-          y1={cy + 26}
-          x2={cx + 72}
-          y2={cy + 8}
-          stroke="#E0F7FA"
-          strokeWidth="1.6"
-          strokeLinecap="round"
+        <polygon
+          points={toPoints(copingPts)}
+          fill={coping.fill}
+          stroke={coping.stroke}
+          strokeWidth="3"
         />
       </g>
 
-      {/* Perimeter Underwater LEDs */}
-      {lights.map((light, idx) => (
-        <g key={`light-${idx}`}>
-          <circle
-            cx={light.x}
-            cy={light.y}
-            r="8"
-            fill={ledGlow}
-            filter="url(#underwaterGlow)"
-            opacity={isNightMode ? "0.96" : "0.52"}
-          />
-          <circle cx={light.x} cy={light.y} r="3" fill="#FFFFFF" />
-        </g>
-      ))}
+      <g id="layer-subject">
+        <polygon points={toPoints(waterPts)} fill="url(#poolWaterGrad)" opacity="0.95" />
 
-      {/* Hydraulic Engineering Overlay */}
-      {showEngineeringOverlay && (
-        <g className="font-mono text-[10px] select-none">
-          <path
-            d={`M ${waterPts[0]!.x + 35} ${waterPts[0]!.y + 20} Q ${cx} ${cy - 45} ${waterPts[2]!.x - 45} ${waterPts[2]!.y - 20}`}
-            fill="none"
-            stroke="#FDE047"
-            strokeWidth="2.2"
-            strokeDasharray="6 4"
-          />
-          <rect x="20" y="20" width="235" height="58" fill="#0F172A" fillOpacity="0.92" stroke="#38BDF8" rx="6" />
-          <text x="32" y="38" fill="#38BDF8" fontWeight="bold">
-            AS 1926 HYDRAULIC TELEMETRY
-          </text>
-          <text x="32" y="54" fill="#F8FAFC">
-            Turnover: {hydraulics.turnoverFlowRateLpm} L/min ({hydraulics.recommendedPumpPowerKw} kW)
-          </text>
-          <text x="32" y="68" fill="#CBD5E1">
-            Media: {hydraulics.filterMediaMassKg} kg &middot; Cl2: {hydraulics.chlorinatorOutputGph} g/hr
-          </text>
-        </g>
-      )}
+        <polyline
+          points={toPoints([waterPts[0]!, waterPts[1]!, waterPts[2]!])}
+          stroke="#ADE8F4"
+          strokeWidth="1.5"
+          fill="none"
+          opacity="0.85"
+        />
 
-      {/* Parametric Dimension Badges */}
-      {showDimensions && (
-        <g className="font-mono text-[11px] font-semibold tabular-nums select-none" fill="#0E7490">
-          <rect
-            x={Math.round((copingPts[0]!.x + copingPts[1]!.x) / 2 - 44)}
-            y={Math.round((copingPts[0]!.y + copingPts[1]!.y) / 2 - 34)}
-            width="88"
-            height="22"
-            fill="#FFFFFF"
-            stroke="#0E7490"
-            rx="4"
-          />
-          <text
-            x={Math.round((copingPts[0]!.x + copingPts[1]!.x) / 2)}
-            y={Math.round((copingPts[0]!.y + copingPts[1]!.y) / 2 - 20)}
-            textAnchor="middle"
-            alignmentBaseline="middle"
-          >
-            {config.lengthMm} mm
-          </text>
+        <polygon
+          points={toPoints(shelfPts)}
+          fill="#90E0EF"
+          opacity="0.42"
+          stroke="#0077B6"
+          strokeWidth="0.75"
+        />
 
-          <rect
-            x={Math.round((copingPts[1]!.x + copingPts[2]!.x) / 2 + 12)}
-            y={Math.round((copingPts[1]!.y + copingPts[2]!.y) / 2 - 11)}
-            width="84"
-            height="22"
-            fill="#FFFFFF"
-            stroke="#0E7490"
-            rx="4"
+        <g className="aura-water-shimmer" opacity="0.35">
+          <line
+            x1={Math.round((waterPts[0]!.x + waterPts[1]!.x) / 2 - 45)}
+            y1={cy - 18}
+            x2={Math.round((waterPts[0]!.x + waterPts[1]!.x) / 2 + 65)}
+            y2={cy - 36}
+            stroke="#E0F7FA"
+            strokeWidth="1.5"
+            strokeLinecap="round"
           />
-          <text
-            x={Math.round((copingPts[1]!.x + copingPts[2]!.x) / 2 + 54)}
-            y={Math.round((copingPts[1]!.y + copingPts[2]!.y) / 2 + 3)}
-            textAnchor="middle"
-            alignmentBaseline="middle"
-          >
-            {config.widthMm} mm
-          </text>
+          <line
+            x1={cx - 30}
+            y1={cy + 26}
+            x2={cx + 72}
+            y2={cy + 8}
+            stroke="#E0F7FA"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </g>
-      )}
+
+        {lights.map((light, idx) => (
+          <g key={`light-${idx}`}>
+            <circle
+              cx={light.x}
+              cy={light.y}
+              r="8"
+              fill={ledGlow}
+              filter="url(#underwaterGlow)"
+              opacity={isNightMode ? "0.96" : "0.52"}
+            />
+            <circle cx={light.x} cy={light.y} r="3" fill="#FFFFFF" />
+          </g>
+        ))}
+      </g>
+
+      <g id="layer-fx">
+        {showEngineeringOverlay && (
+          <g className="font-mono text-[10px] select-none">
+            <path
+              d={`M ${waterPts[0]!.x + 35} ${waterPts[0]!.y + 20} Q ${cx} ${cy - 45} ${waterPts[2]!.x - 45} ${waterPts[2]!.y - 20}`}
+              fill="none"
+              stroke="#FDE047"
+              strokeWidth="2"
+              strokeDasharray="6 4"
+            />
+            <rect x="20" y="20" width="240" height="58" fill="#0F172A" fillOpacity="0.92" stroke="#38BDF8" rx="8" />
+            <text x="32" y="38" fill="#38BDF8" fontWeight="bold">
+              AS 1926 HYDRAULIC TELEMETRY
+            </text>
+            <text x="32" y="54" fill="#F8FAFC">
+              Turnover: {hydraulics.turnoverFlowRateLpm} L/min ({hydraulics.recommendedPumpPowerKw} kW)
+            </text>
+            <text x="32" y="68" fill="#CBD5E1">
+              Media: {hydraulics.filterMediaMassKg} kg &middot; Cl2: {hydraulics.chlorinatorOutputGph} g/hr
+            </text>
+          </g>
+        )}
+
+        {showDimensions && (
+          <g className="font-mono text-[11px] font-semibold tabular-nums select-none" fill="#0E7490">
+            <rect
+              x={Math.round((copingPts[0]!.x + copingPts[1]!.x) / 2 - 44)}
+              y={Math.round((copingPts[0]!.y + copingPts[1]!.y) / 2 - 34)}
+              width="88"
+              height="22"
+              fill="#FFFFFF"
+              stroke="#0E7490"
+              rx="6"
+            />
+            <text
+              x={Math.round((copingPts[0]!.x + copingPts[1]!.x) / 2)}
+              y={Math.round((copingPts[0]!.y + copingPts[1]!.y) / 2 - 20)}
+              textAnchor="middle"
+              alignmentBaseline="middle"
+            >
+              {config.lengthMm} mm
+            </text>
+
+            <rect
+              x={Math.round((copingPts[1]!.x + copingPts[2]!.x) / 2 + 12)}
+              y={Math.round((copingPts[1]!.y + copingPts[2]!.y) / 2 - 11)}
+              width="84"
+              height="22"
+              fill="#FFFFFF"
+              stroke="#0E7490"
+              rx="6"
+            />
+            <text
+              x={Math.round((copingPts[1]!.x + copingPts[2]!.x) / 2 + 54)}
+              y={Math.round((copingPts[1]!.y + copingPts[2]!.y) / 2 + 3)}
+              textAnchor="middle"
+              alignmentBaseline="middle"
+            >
+              {config.widthMm} mm
+            </text>
+          </g>
+        )}
+      </g>
     </svg>
   );
 };

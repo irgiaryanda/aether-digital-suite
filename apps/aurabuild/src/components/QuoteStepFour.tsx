@@ -22,31 +22,31 @@ export const QuoteStepFour: React.FC<Props> = ({
 }) => {
   return (
     <div className="space-y-3 font-mono text-xs">
-      <div className="p-3.5 bg-aura-subtle rounded-xl border border-aura-border space-y-2">
-        <div className="flex justify-between font-sans font-bold text-aura-text text-sm pb-2 border-b border-aura-border">
+      <div className="p-4 bg-aura-subtle rounded-[14px] border border-aura-border space-y-2.5 tabular-nums">
+        <div className="flex justify-between font-sans font-bold text-aura-text text-sm pb-2.5 border-b border-aura-border">
           <span>{productType === "GARAGE_DOOR" ? "Sectional Garage Door Spec" : "Cantilevered Pool Spec"}</span>
-          <span className="text-aura-cyan">
+          <span className="text-aura-cyan font-mono tabular-nums">
             ${bom.totalIncGstAud.toLocaleString(undefined, { minimumFractionDigits: 2 })} AUD
           </span>
         </div>
-        <div className="flex justify-between text-aura-text-muted">
+        <div className="flex justify-between text-aura-text-dim">
           <span>Client:</span>
-          <span className="text-aura-text">{customerName} ({phone})</span>
+          <span className="text-aura-text font-medium">{customerName} ({phone})</span>
         </div>
-        <div className="flex justify-between text-aura-text-muted">
+        <div className="flex justify-between text-aura-text-dim">
           <span>Site Address:</span>
-          <span className="text-aura-text">{siteAddress}, {postcode}</span>
+          <span className="text-aura-text font-medium">{siteAddress}, {postcode}</span>
         </div>
-        <div className="flex justify-between text-aura-text-muted">
+        <div className="flex justify-between text-aura-text-dim">
           <span>Wind Zone:</span>
           <span className="text-aura-text font-bold">Region {windRegion}</span>
         </div>
-        <div className="flex justify-between text-aura-text-muted">
+        <div className="flex justify-between text-aura-text-dim">
           <span>Quote Ref:</span>
           <span className="text-aura-cyan font-bold">{bom.quoteReference}</span>
         </div>
       </div>
-      <p className="text-[11px] text-aura-text-dim font-sans">
+      <p className="text-[11px] text-aura-text-dim font-sans leading-relaxed">
         Submitting this request locks your itemized manufacturing BOM pricing for 30 days and registers the survey order into our dispatch queue.
       </p>
     </div>

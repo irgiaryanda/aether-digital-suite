@@ -25,7 +25,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end print:hidden"
+      className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm flex justify-end print:hidden"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -34,12 +34,12 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
         role="dialog"
         aria-modal="true"
         aria-labelledby="aura-wp-inspector-title"
-        className="bg-[#0F1117] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs"
+        className="bg-[#0D1015] text-[#E6EDF3] w-full max-w-xl h-full shadow-2xl border-l border-white/10 flex flex-col font-mono text-xs"
       >
-        <div className="px-5 py-3 border-b border-white/10 flex items-center justify-between bg-[#161B22]">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h2 id="aura-wp-inspector-title" className="font-bold text-xs text-white font-sans">
+        <div className="px-5 py-3.5 border-b border-white/10 flex items-center justify-between bg-[#131720]">
+          <div className="flex items-center space-x-2.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <h2 id="aura-wp-inspector-title" className="font-bold text-xs text-white font-sans tracking-tight">
               WordPress PHP & ACF Architecture Inspector
             </h2>
           </div>
@@ -47,13 +47,13 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
             type="button"
             onClick={onClose}
             aria-label="Close WordPress Inspector Drawer"
-            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1 rounded text-white/60 hover:text-white"
+            className="min-h-[36px] min-w-[36px] flex items-center justify-center p-1 rounded-[10px] text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="flex border-b border-white/10 bg-[#161B22]/50 px-3 pt-2 space-x-1">
+        <div className="flex border-b border-white/10 bg-[#131720]/80 px-3 pt-2 space-x-1">
           {[
             { id: "rest", label: "WP REST", icon: Code },
             { id: "php", label: "PHP Controller", icon: FileText },
@@ -67,8 +67,8 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id as typeof tab)}
-                className={`py-1.5 px-3 rounded-t-lg text-[11px] font-sans flex items-center space-x-1.5 ${
-                  isActive ? "bg-[#0F1117] text-cyan-400 border-t-2 border-cyan-400 font-bold" : "text-white/60 hover:text-white"
+                className={`py-1.5 px-3 rounded-t-[10px] text-[11px] font-sans flex items-center space-x-1.5 transition-colors duration-200 ${
+                  isActive ? "bg-[#0D1015] text-cyan-400 border-t-2 border-cyan-400 font-bold" : "text-white/60 hover:text-white"
                 }`}
               >
                 <Icon size={14} />
@@ -80,7 +80,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
 
         <div className="p-4 overflow-y-auto flex-1 space-y-3">
           {syncTelemetry && (
-            <div className="p-2.5 rounded-lg bg-[#161B22] border border-cyan-500/30 flex items-center justify-between text-[11px]">
+            <div className="p-3 rounded-[10px] bg-[#131720] border border-cyan-500/30 flex items-center justify-between text-[11px]">
               <span>
                 Transport: <strong className="text-cyan-300">{syncTelemetry.mode}</strong>
               </span>
@@ -99,14 +99,14 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-white/50 uppercase block mb-1">Live Configurator Payload</span>
-                <pre className="p-3 bg-[#161B22] rounded-lg border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-cyan-200">
+                <span className="text-[11px] text-white/55 font-sans block mb-1.5">Live Configurator Payload</span>
+                <pre className="p-3.5 bg-[#131720] rounded-[12px] border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-cyan-200">
                   {JSON.stringify(livePayload, null, 2)}
                 </pre>
               </div>
               <div>
-                <span className="text-[10px] text-white/50 uppercase block mb-1">WP REST Response Schema</span>
-                <pre className="p-3 bg-[#161B22] rounded-lg border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-emerald-300">
+                <span className="text-[11px] text-white/55 font-sans block mb-1.5">WP REST Response Schema</span>
+                <pre className="p-3.5 bg-[#131720] rounded-[12px] border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-emerald-300">
                   {JSON.stringify(AURA_WP_METADATA.sampleResponsePayload, null, 2)}
                 </pre>
               </div>
@@ -118,7 +118,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
               <span className="text-[11px] text-white/70 block">
                 Class: <code className="text-cyan-400">AetherDigital\WP\Rest\AuraQuotesController</code>
               </span>
-              <pre className="p-3 bg-[#161B22] rounded-lg border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-amber-200">
+              <pre className="p-3.5 bg-[#131720] rounded-[12px] border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-amber-200">
                 {AURA_WP_METADATA.phpSnippet}
               </pre>
             </div>
@@ -127,7 +127,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
           {tab === "sql" && (
             <div className="space-y-2">
               <span className="text-[11px] text-white/70 block">Storage Model: wp_posts + wp_postmeta</span>
-              <pre className="p-3 bg-[#161B22] rounded-lg border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-blue-200">
+              <pre className="p-3.5 bg-[#131720] rounded-[12px] border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-cyan-100">
                 {AURA_WP_METADATA.sqlSchemaSnippet}
               </pre>
             </div>
@@ -138,7 +138,7 @@ export const WpInspectorDrawer: React.FC<Props> = ({ isOpen, onClose, livePayloa
               <span className="text-[11px] text-white/70 block">
                 ACF Group: <code className="text-cyan-400">{AURA_WP_METADATA.acfFieldGroupId}</code>
               </span>
-              <pre className="p-3 bg-[#161B22] rounded-lg border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-purple-200">
+              <pre className="p-3.5 bg-[#131720] rounded-[12px] border border-white/10 overflow-x-auto text-[11px] leading-relaxed text-cyan-200">
                 {`{
   "key": "group_aura_configurator",
   "title": "AuraBuild Specifications",

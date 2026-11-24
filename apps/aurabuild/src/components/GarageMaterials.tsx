@@ -8,10 +8,10 @@ interface Props {
 
 export const GarageMaterials: React.FC<Props> = ({ config, onChange }) => {
   const styles: { id: GarageDoorStyle; name: string; desc: string }[] = [
-    { id: "ARCHITECTURAL_HORIZONTAL", name: "Architectural Horizontal Rib", desc: "Clean linear rib geometry" },
-    { id: "VERTICAL_BATTEN", name: "Vertical Batten Cladding", desc: "Bespoke architectural batten relief" },
-    { id: "HAMPTONS_COFFERED", name: "Hamptons Coffered Frame", desc: "Symmetrical coastal millwork panels" },
-    { id: "FLUSH_MOUNT", name: "Concealed Flush Mount", desc: "Seamless negative-detail facade" },
+    { id: "ARCHITECTURAL_HORIZONTAL", name: "Horizontal Rib", desc: "Crisp linear flute geometry" },
+    { id: "VERTICAL_BATTEN", name: "Vertical Batten", desc: "Architectural aluminum relief" },
+    { id: "HAMPTONS_COFFERED", name: "Hamptons Coffered", desc: "Coastal recessed millwork" },
+    { id: "FLUSH_MOUNT", name: "Flush Mount", desc: "Concealed negative facade" },
   ];
 
   const finishes: { id: GarageFinish; name: string; hex: string; note: string }[] = [
@@ -23,52 +23,52 @@ export const GarageMaterials: React.FC<Props> = ({ config, onChange }) => {
   ];
 
   const glazingOptions: { id: GlazingOption; name: string; desc: string }[] = [
-    { id: "NONE", name: "Solid Panels (No Glazing)", desc: "Max thermal insulation and wind rating" },
-    { id: "ACRYLIC_CLEAR_TOP", name: "Clear Horizon Windows", desc: "Impact acrylic top-row inserts" },
-    { id: "FROSTED_PRIVACY_TOP", name: "Frosted Privacy Windows", desc: "Translucent privacy top-row inserts" },
-    { id: "FULL_VIEW_PANEL", name: "Full-View Glazed Panel", desc: "Extruded aluminum framed panoramic view" },
+    { id: "NONE", name: "Solid Panels", desc: "Maximum thermal seal and wind rating" },
+    { id: "ACRYLIC_CLEAR_TOP", name: "Clear Horizon", desc: "Impact acrylic top-row inserts" },
+    { id: "FROSTED_PRIVACY_TOP", name: "Frosted Privacy", desc: "Translucent top-row inserts" },
+    { id: "FULL_VIEW_PANEL", name: "Full-View Glazed", desc: "Extruded aluminum framed glass row" },
   ];
 
   const activeStyle = config.doorStyle ?? "ARCHITECTURAL_HORIZONTAL";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Architectural Profile</label>
-        <div className="grid grid-cols-2 gap-1.5">
+        <span className="text-xs font-semibold text-aura-text block mb-2">Architectural Profile</span>
+        <div className="grid grid-cols-2 gap-2">
           {styles.map((s) => (
             <button
               key={s.id}
               type="button"
               onClick={() => onChange({ doorStyle: s.id })}
-              className={`p-2 rounded-lg border text-left transition-all ${
+              className={`p-2.5 rounded-[12px] border text-left transition-all duration-300 ease-spring active:scale-[0.98] ${
                 activeStyle === s.id
-                  ? "bg-cyan-50/70 border-aura-cyan shadow-sm"
+                  ? "bg-aura-cyan/[0.06] border-aura-cyan shadow-sm"
                   : "bg-white border-aura-border hover:bg-aura-subtle"
               }`}
             >
-              <span className="text-[11px] font-bold text-aura-text block truncate">{s.name}</span>
-              <span className="text-[10px] text-aura-text-dim block truncate">{s.desc}</span>
+              <span className="text-xs font-bold text-aura-text block truncate">{s.name}</span>
+              <span className="text-[11px] text-aura-text-dim block truncate mt-0.5">{s.desc}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Cladding Finish</label>
-        <div className="space-y-1.5">
+        <span className="text-xs font-semibold text-aura-text block mb-2">Cladding Finish</span>
+        <div className="space-y-2">
           {finishes.map((f) => (
             <button
               key={f.id}
               type="button"
               onClick={() => onChange({ finish: f.id })}
-              className={`w-full flex items-center space-x-3 p-2 rounded-lg border text-left transition-all ${
+              className={`w-full flex items-center space-x-3 p-2.5 rounded-[12px] border text-left transition-all duration-300 ease-spring active:scale-[0.99] ${
                 config.finish === f.id
-                  ? "bg-cyan-50/70 border-aura-cyan shadow-sm"
+                  ? "bg-aura-cyan/[0.06] border-aura-cyan shadow-sm"
                   : "bg-white border-aura-border hover:bg-aura-subtle"
               }`}
             >
-              <span className="w-6 h-6 rounded border border-black/20 flex-shrink-0" style={{ backgroundColor: f.hex }} />
+              <span className="w-6 h-6 rounded-md border border-black/15 flex-shrink-0" style={{ backgroundColor: f.hex }} />
               <div className="flex-1 min-w-0">
                 <span className="text-xs font-bold text-aura-text block truncate">{f.name}</span>
                 <span className="text-[11px] text-aura-text-dim block">{f.note}</span>
@@ -79,21 +79,21 @@ export const GarageMaterials: React.FC<Props> = ({ config, onChange }) => {
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Window Inserts</label>
-        <div className="space-y-1.5">
+        <span className="text-xs font-semibold text-aura-text block mb-2">Window Inserts</span>
+        <div className="grid grid-cols-2 gap-2">
           {glazingOptions.map((g) => (
             <button
               key={g.id}
               type="button"
               onClick={() => onChange({ glazing: g.id })}
-              className={`w-full p-2 rounded-lg border text-left transition-all ${
+              className={`p-2.5 rounded-[12px] border text-left transition-all duration-300 ease-spring active:scale-[0.98] ${
                 config.glazing === g.id
-                  ? "bg-cyan-50/70 border-aura-cyan shadow-sm"
+                  ? "bg-aura-cyan/[0.06] border-aura-cyan shadow-sm"
                   : "bg-white border-aura-border hover:bg-aura-subtle"
               }`}
             >
               <span className="text-xs font-bold text-aura-text block">{g.name}</span>
-              <span className="text-[11px] text-aura-text-dim block">{g.desc}</span>
+              <span className="text-[11px] text-aura-text-dim block mt-0.5">{g.desc}</span>
             </button>
           ))}
         </div>

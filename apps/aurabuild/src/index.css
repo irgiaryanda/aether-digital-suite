@@ -3,15 +3,62 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    background-color: #F8F9FA;
-    color: #1A1D20;
+    background-color: #F6F7F9;
+    color: #111418;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #0E7490;
+    outline-offset: 2px;
+  }
+}
+
+.aura-grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+input[type="range"].aura-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #DCE2EA;
+  border-radius: 999px;
+}
+
+input[type="range"].aura-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #0E7490;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 8px rgba(14, 116, 144, 0.35);
+  cursor: pointer;
+  transition: transform 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+input[type="range"].aura-range::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
 }
 
 @keyframes auraShimmer {
@@ -24,11 +71,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aura-door-motion {
-    transition: none !important;
-  }
-  .aura-water-shimmer {
-    animation: none !important;
+  .aura-door-motion,
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -41,6 +87,9 @@
     background: #FFFFFF !important;
     color: #000000 !important;
   }
+  .aura-grain-overlay {
+    display: none !important;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -48,12 +97,12 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F3F5;
+  background: #EAEEF3;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CED4DA;
-  border-radius: 3px;
+  background: #CBD2DC;
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #868E96;
+  background: #94A3B8;
 }

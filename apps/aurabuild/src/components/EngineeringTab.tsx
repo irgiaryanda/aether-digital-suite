@@ -42,22 +42,23 @@ export const EngineeringTab: React.FC<EngineeringTabProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="p-3 bg-aura-subtle rounded-xl border border-aura-border">
-        <label className="text-xs font-semibold text-aura-text block mb-1">
+      <div className="p-3.5 bg-aura-subtle rounded-[14px] border border-aura-border">
+        <label htmlFor="aura-eng-postcode" className="text-xs font-semibold text-aura-text block mb-1.5">
           Australian Site Postcode (AS/NZS 4505:2012)
         </label>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           <input
+            id="aura-eng-postcode"
             type="text"
             value={currentPostcode}
             onChange={(e) => handlePostcodeChange(e.target.value)}
             placeholder="e.g. 2088"
             maxLength={4}
-            className="w-20 px-2.5 py-1 bg-white border border-aura-border rounded-lg text-xs font-bold font-mono tabular-nums text-aura-text focus:border-aura-cyan focus:outline-none"
+            className="w-20 px-2.5 py-1.5 bg-white border border-aura-border rounded-[10px] text-xs font-bold font-mono tabular-nums text-aura-text focus:border-aura-cyan focus:outline-none transition-colors duration-200"
           />
           <div className="flex-1 min-w-0">
             <span className="text-xs font-bold text-aura-text block truncate">{resolution.suburb}</span>
-            <span className="text-[11px] text-aura-cyan font-medium block">
+            <span className="text-[11px] text-aura-cyan font-semibold block">
               {resolution.state} &middot; {resolution.regionDescription}
             </span>
           </div>

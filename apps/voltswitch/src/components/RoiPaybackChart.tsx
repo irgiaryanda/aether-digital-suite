@@ -12,10 +12,7 @@ export const RoiPaybackChart: React.FC<Props> = ({ roi }) => {
     netAud: Math.round(roi.annualAudSaved * year - roi.totalCapitalCostAud),
   }));
 
-  const maxAbs = Math.max(
-    1000,
-    ...points.map((p) => Math.abs(p.netAud))
-  );
+  const maxAbs = Math.max(1000, ...points.map((p) => Math.abs(p.netAud)));
 
   const width = 560;
   const height = 160;
@@ -23,24 +20,28 @@ export const RoiPaybackChart: React.FC<Props> = ({ roi }) => {
   const barAreaHalf = 62;
 
   return (
-    <div className="p-3 bg-volt-base rounded-lg border border-volt-border space-y-2">
-      <div className="flex items-center justify-between text-[10px] font-mono">
-        <span className="text-gray-400 uppercase font-bold">5-Year Cumulative Net Cashflow Projection</span>
-        <span className={roi.fiveYearNetSavingsAud >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold"}>
+    <div className="p-4 bg-volt-recessed rounded-[12px] border border-white/[0.06] space-y-2.5">
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-volt-muted font-semibold">5-Year Cumulative Net Cashflow Projection</span>
+        <span
+          className={`font-mono font-bold tabular-nums ${
+            roi.fiveYearNetSavingsAud >= 0 ? "text-emerald-400" : "text-red-400"
+          }`}
+        >
           5Y Net: ${roi.fiveYearNetSavingsAud.toLocaleString()} AUD
         </span>
       </div>
 
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-36 select-none" preserveAspectRatio="xMidYMid meet">
-        <line x1="24" y1={zeroY} x2={width - 20} y2={zeroY} stroke="#4B5563" strokeWidth="1.2" strokeDasharray="4 3" />
-        <text x="16" y={zeroY + 3} textAnchor="end" fill="#6B7280" fontSize="9" fontFamily="JetBrains Mono">
+        <line x1="28" y1={zeroY} x2={width - 20} y2={zeroY} stroke="#384359" strokeWidth="1.2" strokeDasharray="4 3" />
+        <text x="18" y={zeroY + 3} textAnchor="end" fill="#64748B" fontSize="9.5" fontFamily="JetBrains Mono">
           $0
         </text>
 
         {points.map((pt, idx) => {
           const barW = 48;
-          const stepX = (width - 80) / points.length;
-          const bx = 44 + idx * stepX;
+          const stepX = (width - 84) / points.length;
+          const bx = 48 + idx * stepX;
           const barH = Math.max(4, Math.round((Math.abs(pt.netAud) / maxAbs) * barAreaHalf));
           const isPositive = pt.netAud >= 0;
           const by = isPositive ? zeroY - barH : zeroY;
@@ -52,27 +53,29 @@ export const RoiPaybackChart: React.FC<Props> = ({ roi }) => {
                 y={by}
                 width={barW}
                 height={barH}
-                rx="3"
+                rx="4"
                 fill={isPositive ? "#10B981" : "#EF4444"}
-                opacity="0.88"
+                opacity="0.9"
               />
               <text
                 x={bx + barW / 2}
-                y={isPositive ? by - 5 : by + barH + 11}
+                y={isPositive ? by - 6 : by + barH + 12}
                 textAnchor="middle"
                 fill={isPositive ? "#34D399" : "#F87171"}
-                fontSize="9"
+                fontSize="9.5"
                 fontFamily="JetBrains Mono"
                 fontWeight="bold"
               >
-                {pt.netAud >= 0 ? `+$${Math.round(pt.netAud / 1000 * 10) / 10}k` : `-$${Math.round(Math.abs(pt.netAud) / 1000 * 10) / 10}k`}
+                {pt.netAud >= 0
+                  ? `+$${Math.round((pt.netAud / 1000) * 10) / 10}k`
+                  : `-$${Math.round((Math.abs(pt.netAud) / 1000) * 10) / 10}k`}
               </text>
               <text
                 x={bx + barW / 2}
                 y={height - 6}
                 textAnchor="middle"
-                fill="#9CA3AF"
-                fontSize="9.5"
+                fill="#94A3B8"
+                fontSize="10"
                 fontFamily="JetBrains Mono"
               >
                 {pt.label}

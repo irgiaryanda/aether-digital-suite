@@ -52,76 +52,87 @@ export const AnalyticsInvoiceView: React.FC<Props> = ({
   }, [activeProject, activeClient, projectTimesheets]);
 
   return (
-    <div className="space-y-6 font-mono text-xs">
-      {/* Utilization Metrics KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 print:hidden">
-        <div className="p-4 bg-chronos-surface border border-white/10 rounded-xl space-y-1 shadow-lg">
-          <div className="flex items-center space-x-1 text-gray-400 text-[10px] uppercase">
-            <TrendUp size={14} className="text-chronos-green" weight="bold" />
-            <span>Billable Utilization</span>
+    <div className="space-y-6 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 print:hidden">
+        <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+          <div className="p-4 bg-chronos-card border border-white/[0.06] rounded-[14px] space-y-1.5">
+            <div className="flex items-center space-x-1.5 text-chronos-muted text-[11px] font-medium">
+              <TrendUp size={15} className="text-chronos-green" weight="bold" />
+              <span>Billable Utilization</span>
+            </div>
+            <div className="font-mono text-2xl font-bold text-chronos-ink tabular-nums">
+              {utilization.utilizationRatePercent}%
+            </div>
+            <span className="text-[11px] text-chronos-dim block">Target benchmark 80%</span>
           </div>
-          <div className="text-xl font-bold text-white tabular-nums">
-            {utilization.utilizationRatePercent}%
-          </div>
-          <span className="text-[10px] text-gray-500">Target benchmark 80%</span>
         </div>
 
-        <div className="p-4 bg-chronos-surface border border-white/10 rounded-xl space-y-1 shadow-lg">
-          <div className="flex items-center space-x-1 text-gray-400 text-[10px] uppercase">
-            <ChartBar size={14} className="text-chronos-indigo" weight="bold" />
-            <span>Billable vs Non-Bill</span>
+        <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+          <div className="p-4 bg-chronos-card border border-white/[0.06] rounded-[14px] space-y-1.5">
+            <div className="flex items-center space-x-1.5 text-chronos-muted text-[11px] font-medium">
+              <ChartBar size={15} className="text-chronos-green" weight="bold" />
+              <span>Billable vs Non-Bill</span>
+            </div>
+            <div className="font-mono text-2xl font-bold text-chronos-green tabular-nums">
+              {utilization.billableHours}h{" "}
+              <span className="text-xs text-chronos-muted font-normal">/ {utilization.nonBillableHours}h</span>
+            </div>
+            <span className="text-[11px] text-chronos-dim block">Total capacity {totalCapacityHours}h</span>
           </div>
-          <div className="text-xl font-bold text-chronos-green tabular-nums">
-            {utilization.billableHours}h <span className="text-xs text-gray-400 font-normal">/ {utilization.nonBillableHours}h</span>
-          </div>
-          <span className="text-[10px] text-gray-500">Total capacity {totalCapacityHours}h</span>
         </div>
 
-        <div className="p-4 bg-chronos-surface border border-white/10 rounded-xl space-y-1 shadow-lg">
-          <div className="flex items-center space-x-1 text-gray-400 text-[10px] uppercase">
-            <CurrencyDollar size={14} className="text-chronos-amber" weight="bold" />
-            <span>Effective Rate</span>
+        <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+          <div className="p-4 bg-chronos-card border border-white/[0.06] rounded-[14px] space-y-1.5">
+            <div className="flex items-center space-x-1.5 text-chronos-muted text-[11px] font-medium">
+              <CurrencyDollar size={15} className="text-chronos-amber" weight="bold" />
+              <span>Effective Rate</span>
+            </div>
+            <div className="font-mono text-2xl font-bold text-chronos-ink tabular-nums">
+              ${utilization.effectiveHourlyRateAud.toFixed(2)}{" "}
+              <span className="text-xs text-chronos-muted font-normal">AUD/h</span>
+            </div>
+            <span className="text-[11px] text-chronos-dim block">Blended agency yield</span>
           </div>
-          <div className="text-xl font-bold text-white tabular-nums">
-            ${utilization.effectiveHourlyRateAud.toFixed(2)}{" "}
-            <span className="text-xs text-gray-400 font-normal">AUD/h</span>
-          </div>
-          <span className="text-[10px] text-gray-500">Blended agency yield</span>
         </div>
 
-        <div className="p-4 bg-chronos-surface border border-white/10 rounded-xl space-y-1 shadow-lg">
-          <div className="flex items-center space-x-1 text-gray-400 text-[10px] uppercase">
-            <Users size={14} className="text-cyan-400" weight="bold" />
-            <span>Active Team Capacity</span>
+        <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+          <div className="p-4 bg-chronos-card border border-white/[0.06] rounded-[14px] space-y-1.5">
+            <div className="flex items-center space-x-1.5 text-chronos-muted text-[11px] font-medium">
+              <Users size={15} className="text-chronos-muted" weight="bold" />
+              <span>Active Team Capacity</span>
+            </div>
+            <div className="font-mono text-2xl font-bold text-chronos-ink tabular-nums">
+              3 Engineers
+            </div>
+            <span className="text-[11px] text-chronos-green font-medium block">100% capacity deployed</span>
           </div>
-          <div className="text-xl font-bold text-white tabular-nums">
-            3 Engineers
-          </div>
-          <span className="text-[10px] text-emerald-400">100% capacity deployed</span>
         </div>
       </div>
 
       <UtilizationChart projects={projects} timesheets={timesheets} />
 
-      {/* Invoice Generator Target Selector */}
-      <div className="bg-chronos-surface border border-white/10 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <div>
-          <span className="text-[10px] text-gray-400 uppercase block">Active Invoice Project Target</span>
-          <h3 className="font-bold text-white text-sm font-sans">Select Client Retainer for Invoicing</h3>
-        </div>
+      <div className="bg-chronos-tray rounded-[20px] p-1.5 border border-white/[0.08] print:hidden">
+        <div className="bg-chronos-card border border-white/[0.06] rounded-[14px] p-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span className="text-[11px] text-chronos-muted font-medium block">Active Invoice Project Target</span>
+            <h2 className="font-display font-bold text-chronos-ink text-sm tracking-tight">
+              Select Client Retainer for Invoicing
+            </h2>
+          </div>
 
-        <select
-          aria-label="Select Client Project for Tax Invoice"
-          value={selectedProjectId}
-          onChange={(e) => setSelectedProjectId(e.target.value)}
-          className="px-3 py-1.5 bg-chronos-canvas border border-white/10 rounded text-white text-xs"
-        >
-          {projects.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.code} &middot; {p.title}
-            </option>
-          ))}
-        </select>
+          <select
+            aria-label="Select Client Project for Tax Invoice"
+            value={selectedProjectId}
+            onChange={(e) => setSelectedProjectId(e.target.value)}
+            className="px-3.5 py-2 bg-chronos-recessed border border-white/[0.08] rounded-[10px] font-mono text-chronos-ink text-xs focus:border-chronos-green focus:outline-none"
+          >
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.code} &middot; {p.title}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <TaxInvoicePreview invoice={generatedInvoice} />

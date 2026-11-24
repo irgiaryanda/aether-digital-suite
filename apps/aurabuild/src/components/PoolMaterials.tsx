@@ -15,9 +15,9 @@ export const PoolMaterials: React.FC<Props> = ({ config, onChange }) => {
   ];
 
   const interiorFinishes: { id: InteriorFinish; name: string; hex: string }[] = [
-    { id: "AQUA_PEARL_CERAMIC", name: "Aqua Pearl Ceramic Tiles + Pebble", hex: "#0096C7" },
-    { id: "SAPPHIRE_SPARKLE_FIBRE", name: "Sapphire Sparkle Resilient Gelcoat", hex: "#023E8A" },
-    { id: "CRUSHED_QUARTZ_DEEP", name: "Hand-Troweled Crushed White Quartz", hex: "#48CAE4" },
+    { id: "AQUA_PEARL_CERAMIC", name: "Aqua Pearl Ceramic & Pebble", hex: "#0096C7" },
+    { id: "SAPPHIRE_SPARKLE_FIBRE", name: "Sapphire Sparkle Gelcoat", hex: "#023E8A" },
+    { id: "CRUSHED_QUARTZ_DEEP", name: "Crushed White Quartz Plaster", hex: "#48CAE4" },
   ];
 
   const ledColors: { id: LedLightingColor; name: string; hex: string }[] = [
@@ -28,22 +28,22 @@ export const PoolMaterials: React.FC<Props> = ({ config, onChange }) => {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Coping Stone</label>
-        <div className="space-y-1.5">
+        <span className="text-xs font-semibold text-aura-text block mb-2">Coping Stone</span>
+        <div className="space-y-2">
           {copings.map((c) => (
             <button
               key={c.id}
               type="button"
               onClick={() => onChange({ copingFinish: c.id })}
-              className={`w-full flex items-center space-x-3 p-2 rounded-lg border text-left transition-all ${
+              className={`w-full flex items-center space-x-3 p-2.5 rounded-[12px] border text-left transition-all duration-300 ease-spring active:scale-[0.99] ${
                 config.copingFinish === c.id
-                  ? "bg-cyan-50/70 border-aura-cyan shadow-sm"
+                  ? "bg-aura-cyan/[0.06] border-aura-cyan shadow-sm"
                   : "bg-white border-aura-border hover:bg-aura-subtle"
               }`}
             >
-              <span className="w-6 h-6 rounded border border-black/20 flex-shrink-0" style={{ backgroundColor: c.hex }} />
+              <span className="w-6 h-6 rounded-md border border-black/15 flex-shrink-0" style={{ backgroundColor: c.hex }} />
               <div>
                 <span className="text-xs font-bold text-aura-text block">{c.name}</span>
                 <span className="text-[11px] text-aura-text-dim block">{c.desc}</span>
@@ -54,37 +54,41 @@ export const PoolMaterials: React.FC<Props> = ({ config, onChange }) => {
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Waterline & Interior</label>
-        <div className="space-y-1.5">
+        <span className="text-xs font-semibold text-aura-text block mb-2">Waterline &amp; Interior</span>
+        <div className="space-y-2">
           {interiorFinishes.map((intf) => (
             <button
               key={intf.id}
               type="button"
               onClick={() => onChange({ interiorFinish: intf.id })}
-              className={`w-full flex items-center space-x-2.5 p-2 rounded-lg border text-left transition-all ${
-                config.interiorFinish === intf.id ? "bg-cyan-50/70 border-aura-cyan" : "bg-white border-aura-border"
+              className={`w-full flex items-center space-x-3 p-2.5 rounded-[12px] border text-left transition-all duration-300 ease-spring ${
+                config.interiorFinish === intf.id
+                  ? "bg-aura-cyan/[0.06] border-aura-cyan"
+                  : "bg-white border-aura-border hover:bg-aura-subtle"
               }`}
             >
-              <span className="w-5 h-5 rounded-full border border-black/20" style={{ backgroundColor: intf.hex }} />
-              <span className="text-xs font-medium text-aura-text">{intf.name}</span>
+              <span className="w-5 h-5 rounded-full border border-black/15 flex-shrink-0" style={{ backgroundColor: intf.hex }} />
+              <span className="text-xs font-semibold text-aura-text">{intf.name}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-aura-text block mb-1.5">Perimeter LED Lights</label>
+        <span className="text-xs font-semibold text-aura-text block mb-2">Perimeter LED Lights</span>
         <div className="grid grid-cols-2 gap-2">
           {ledColors.map((led) => (
             <button
               key={led.id}
               type="button"
               onClick={() => onChange({ ledColor: led.id })}
-              className={`flex items-center space-x-2 p-2 rounded-lg border text-xs font-medium transition-all ${
-                config.ledColor === led.id ? "bg-cyan-50 border-aura-cyan text-aura-cyan font-bold" : "bg-white border-aura-border"
+              className={`flex items-center space-x-2 p-2.5 rounded-[12px] border text-xs font-semibold transition-all duration-300 ease-spring ${
+                config.ledColor === led.id
+                  ? "bg-aura-cyan/[0.08] border-aura-cyan text-aura-cyan"
+                  : "bg-white border-aura-border text-aura-text hover:bg-aura-subtle"
               }`}
             >
-              <span className="w-3.5 h-3.5 rounded-full border border-black/20" style={{ backgroundColor: led.hex }} />
+              <span className="w-3.5 h-3.5 rounded-full border border-black/20 flex-shrink-0" style={{ backgroundColor: led.hex }} />
               <span className="truncate">{led.name}</span>
             </button>
           ))}

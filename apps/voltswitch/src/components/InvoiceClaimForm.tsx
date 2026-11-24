@@ -11,7 +11,7 @@ import {
   validateAustralianBusinessNumber,
   wpRestClient,
 } from "@aether/core-engine";
-import { CheckCircle, Warning, Receipt } from "@phosphor-icons/react";
+import { ArrowRight, CheckCircle, Receipt, Warning } from "@phosphor-icons/react";
 import { WholesalerSelector } from "./WholesalerSelector";
 import { AttachedReceipt, InvoiceReceiptDropzone } from "./InvoiceReceiptDropzone";
 
@@ -125,105 +125,115 @@ export const InvoiceClaimForm: React.FC<Props> = ({
   };
 
   return (
-    <div className="bg-volt-surface rounded-xl border border-volt-border p-4 shadow-lg space-y-3 font-mono text-xs">
-      <div className="flex items-center justify-between border-b border-volt-border pb-2">
-        <div className="flex items-center space-x-2">
-          <Receipt size={16} className="text-volt-amber" weight="fill" />
-          <h3 className="font-bold text-white">Wholesaler Invoice Tax Claim</h3>
+    <div className="bg-volt-tray rounded-[20px] p-1.5 border border-white/[0.08]">
+      <div className="bg-volt-surface rounded-[14px] p-5 border border-white/[0.06] space-y-4 text-xs">
+        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+          <div className="flex items-center space-x-2">
+            <Receipt size={17} className="text-volt-amber" weight="fill" />
+            <h2 className="font-bold text-sm text-volt-ink tracking-tight">Wholesaler Invoice Tax Claim</h2>
+          </div>
+          <span className="text-[11px] font-mono text-volt-amber font-bold tabular-nums">
+            {contractor.tier} {activeTierMeta.multiplier}x
+          </span>
         </div>
-        <span className="text-[10px] text-amber-400 font-bold">
-          {contractor.tier} {activeTierMeta.multiplier}x
-        </span>
-      </div>
 
-      {/* Tier Spend Progress */}
-      <div className="p-2.5 bg-volt-base rounded-lg border border-volt-border space-y-1.5">
-        <div className="flex justify-between text-[10px]">
-          <span className="text-gray-400">
-            Annual Spend: <strong className="text-white tabular-nums">${contractor.annualSpendAud.toLocaleString()}</strong>
-          </span>
-          <span className="text-volt-amber tabular-nums">
-            {contractor.tier === "PLATINUM"
-              ? "PLATINUM MAX 2.0x"
-              : `$${remainingToPlatinum.toLocaleString()} to Platinum`}
-          </span>
+        <div className="p-3 bg-volt-recessed rounded-[12px] border border-white/[0.06] space-y-2">
+          <div className="flex justify-between text-[11px]">
+            <span className="text-volt-muted">
+              Annual Spend: <strong className="font-mono text-volt-ink tabular-nums">${contractor.annualSpendAud.toLocaleString()}</strong>
+            </span>
+            <span className="font-mono text-volt-amber font-semibold tabular-nums">
+              {contractor.tier === "PLATINUM"
+                ? "PLATINUM MAX 2.0x"
+                : `$${remainingToPlatinum.toLocaleString()} to Platinum`}
+            </span>
+          </div>
+          <div className="w-full h-1.5 bg-volt-elevated rounded-full overflow-hidden">
+            <div
+              className="h-full bg-volt-amber transition-all duration-300 ease-spring"
+              style={{ width: `${spendProgressPercent}%` }}
+            />
+          </div>
         </div>
-        <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-volt-amber transition-all duration-300"
-            style={{ width: `${spendProgressPercent}%` }}
+
+        {status.err && (
+          <div className="p-2.5 bg-red-950/60 border border-red-500/40 rounded-[10px] text-red-300 flex items-center space-x-2">
+            <Warning size={15} className="text-red-400 flex-shrink-0" />
+            <span>{status.err}</span>
+          </div>
+        )}
+
+        {status.msg && (
+          <div className="p-2.5 bg-emerald-950/60 border border-emerald-500/40 rounded-[10px] text-emerald-300 flex items-center space-x-2">
+            <CheckCircle size={15} className="text-emerald-400 flex-shrink-0" weight="fill" />
+            <span>{status.msg}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleClaim} className="space-y-3.5">
+          <WholesalerSelector
+            selectedWholesaler={wholesaler}
+            onSelect={selectWholesaler}
+            abn={abn}
+            onAbnChange={setAbn}
+            isValidAbn={isValidAbn}
           />
-        </div>
+
+          <InvoiceReceiptDropzone
+            attachedFile={attachedReceipt}
+            onAttach={setAttachedReceipt}
+            onSimulateOcr={(preset) => {
+              selectWholesaler(preset.wholesaler);
+              setInvNum(preset.invoiceNumber);
+              setSubtotal(preset.subtotalExGst);
+            }}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="volt-invoice-num" className="text-volt-muted font-medium block mb-1">
+                Invoice #
+              </label>
+              <input
+                id="volt-invoice-num"
+                type="text"
+                value={invNum}
+                onChange={(e) => setInvNum(e.target.value)}
+                className="w-full px-3 py-2 bg-volt-recessed border border-white/[0.08] rounded-[10px] font-mono text-volt-ink focus:border-volt-amber focus:outline-none transition-colors duration-200"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="volt-subtotal-gst" className="text-volt-muted font-medium block mb-1">
+                Subtotal ex-GST (AUD)
+              </label>
+              <input
+                id="volt-subtotal-gst"
+                type="number"
+                step="0.01"
+                value={subtotal}
+                onChange={(e) => setSubtotal(e.target.value)}
+                className="w-full px-3 py-2 bg-volt-recessed border border-white/[0.08] rounded-[10px] font-mono tabular-nums text-volt-ink focus:border-volt-amber focus:outline-none transition-colors duration-200"
+              />
+            </div>
+          </div>
+
+          <div className="p-3 bg-volt-recessed rounded-[12px] border border-white/[0.06] flex items-center justify-between">
+            <span className="text-volt-muted">Points Yield ({contractor.tier} {activeTierMeta.multiplier}x)</span>
+            <span className="font-mono text-volt-amber font-bold tabular-nums">+{points.toLocaleString()} pts</span>
+          </div>
+
+          <button
+            type="submit"
+            className="group w-full min-h-[42px] px-4 py-2 rounded-full bg-volt-amber hover:bg-volt-amber-hover text-volt-base font-bold text-xs flex items-center justify-center space-x-2 transition-all duration-200 ease-spring active:scale-[0.98] shadow-sm"
+          >
+            <span>Submit Wholesaler Claim</span>
+            <span className="w-5 h-5 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-0.5 transition-transform duration-200">
+              <ArrowRight size={12} weight="bold" />
+            </span>
+          </button>
+        </form>
       </div>
-
-      {status.err && (
-        <div className="p-2 bg-red-950/60 border border-red-500/50 rounded text-red-300 flex items-center space-x-1.5">
-          <Warning size={14} className="text-red-400 flex-shrink-0" />
-          <span>{status.err}</span>
-        </div>
-      )}
-
-      {status.msg && (
-        <div className="p-2 bg-emerald-950/60 border border-emerald-500/50 rounded text-emerald-300 flex items-center space-x-1.5">
-          <CheckCircle size={14} className="text-emerald-400 flex-shrink-0" />
-          <span>{status.msg}</span>
-        </div>
-      )}
-
-      <form onSubmit={handleClaim} className="space-y-3">
-        <WholesalerSelector
-          selectedWholesaler={wholesaler}
-          onSelect={selectWholesaler}
-          abn={abn}
-          onAbnChange={setAbn}
-          isValidAbn={isValidAbn}
-        />
-
-        <InvoiceReceiptDropzone
-          attachedFile={attachedReceipt}
-          onAttach={setAttachedReceipt}
-          onSimulateOcr={(preset) => {
-            selectWholesaler(preset.wholesaler);
-            setInvNum(preset.invoiceNumber);
-            setSubtotal(preset.subtotalExGst);
-          }}
-        />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <div>
-            <span className="text-gray-400 block mb-0.5">Invoice #</span>
-            <input
-              type="text"
-              value={invNum}
-              onChange={(e) => setInvNum(e.target.value)}
-              className="w-full px-2 py-1.5 bg-volt-base border border-volt-border rounded text-white"
-            />
-          </div>
-
-          <div>
-            <span className="text-gray-400 block mb-0.5">Subtotal ex-GST (AUD)</span>
-            <input
-              type="number"
-              step="0.01"
-              value={subtotal}
-              onChange={(e) => setSubtotal(e.target.value)}
-              className="w-full px-2 py-1.5 bg-volt-base border border-volt-border rounded text-white"
-            />
-          </div>
-        </div>
-
-        <div className="p-2 bg-volt-base rounded border border-volt-border flex items-center justify-between">
-          <span className="text-gray-400">Points Yield ({contractor.tier} {activeTierMeta.multiplier}x)</span>
-          <span className="text-volt-amber font-bold tabular-nums">+{points.toLocaleString()} pts</span>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full min-h-[40px] py-2 rounded bg-volt-amber hover:bg-amber-400 text-black font-bold uppercase transition-colors"
-        >
-          Submit Wholesaler Claim &rarr;
-        </button>
-      </form>
     </div>
   );
 };
