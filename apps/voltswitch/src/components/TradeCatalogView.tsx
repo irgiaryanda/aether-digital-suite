@@ -111,14 +111,14 @@ export const TradeCatalogView: React.FC = () => {
           </div>
 
           {tenderSummary.totalItems > 0 && (
-            <div className="flex items-center space-x-3 bg-volt-recessed px-3.5 py-1.5 rounded-full border border-volt-amber/50">
-              <span className="font-mono text-volt-ink tabular-nums">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:space-x-2 bg-volt-recessed px-3.5 py-1.5 rounded-full border border-volt-amber/50">
+              <span className="font-mono text-volt-ink tabular-nums whitespace-nowrap">
                 {tenderSummary.totalItems} fittings (${tenderSummary.totalAud.toFixed(2)})
               </span>
               <button
                 type="button"
                 onClick={handleDownloadBoq}
-                className="px-3 py-1 bg-volt-amber hover:bg-volt-amber-hover text-volt-base font-bold text-xs rounded-full flex items-center space-x-1 transition-all duration-200 ease-spring active:scale-[0.98]"
+                className="px-3 py-1 bg-volt-amber hover:bg-volt-amber-hover text-volt-base font-bold text-xs rounded-full flex items-center space-x-1 whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-spring active:scale-[0.98]"
               >
                 <DownloadSimple size={13} weight="bold" />
                 <span>BOQ CSV</span>

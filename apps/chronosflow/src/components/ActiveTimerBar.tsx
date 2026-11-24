@@ -38,6 +38,16 @@ export const ActiveTimerBar: React.FC<Props> = ({
     timerState.isRunning
   );
 
+  useEffect(() => {
+    if (elapsed >= 5 || (!timerState.isRunning && elapsed === 0)) {
+      setValidationHint(null);
+    }
+  }, [elapsed, timerState.isRunning]);
+
+  useEffect(() => {
+    setValidationHint(null);
+  }, [timerState.taskId, timerState.projectId, timerState.description]);
+
   const handleStart = () => {
     setValidationHint(null);
     onTimerUpdate({ ...timerState, startedAtMs: Date.now(), isRunning: true });

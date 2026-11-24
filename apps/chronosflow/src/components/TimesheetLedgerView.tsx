@@ -68,7 +68,9 @@ export const TimesheetLedgerView: React.FC<Props> = ({
 
               <div className="text-chronos-muted bg-chronos-recessed px-3.5 py-1.5 rounded-full border border-white/[0.08] font-mono">
                 <strong className="text-chronos-ink tabular-nums">{summary.hours}h</strong> logged &middot;{" "}
-                <strong className="text-chronos-green tabular-nums">${summary.billableAud.toLocaleString()} AUD</strong>
+                <strong className="text-chronos-green tabular-nums">
+                  ${summary.billableAud.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} AUD
+                </strong>
               </div>
             </div>
           </div>

@@ -32,12 +32,12 @@ export const AuraVisualizer: React.FC<AuraVisualizerProps> = ({
   return (
     <div className="bg-aura-tray p-1.5 rounded-[24px] border border-[#DCE2EA] shadow-[0_14px_40px_-14px_rgba(17,20,24,0.09)]">
       <div className="bg-white rounded-[18px] border border-aura-border shadow-[inset_0_1px_1px_rgba(255,255,255,0.9)] flex flex-col overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-b border-aura-border">
-          <div className="flex items-center space-x-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3.5 border-b border-aura-border">
+          <div className="flex flex-wrap items-center gap-2 min-w-0">
             <h2 className="font-display text-sm font-semibold text-aura-text">
               {productType === "GARAGE_DOOR" ? "Sectional Garage Elevation" : "Cantilevered Basin Perspective"}
             </h2>
-            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-aura-subtle border border-aura-border text-aura-cyan font-mono font-semibold tabular-nums">
+            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-aura-subtle border border-aura-border text-aura-cyan font-mono font-semibold tabular-nums whitespace-nowrap flex-shrink-0">
               {productType === "GARAGE_DOOR"
                 ? `${garageConfig.widthMm} x ${garageConfig.heightMm} mm`
                 : `${poolConfig.lengthMm} x ${poolConfig.widthMm} mm`}

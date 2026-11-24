@@ -63,7 +63,7 @@ export const ManualEntryForm: React.FC<Props> = ({ projects, onAddEntry }) => {
               id="manual-project"
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
-              className="w-full px-3 py-2 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink focus:border-chronos-green focus:outline-none"
+              className="w-full h-[38px] px-3 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink truncate focus:border-chronos-green focus:outline-none"
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -81,7 +81,7 @@ export const ManualEntryForm: React.FC<Props> = ({ projects, onAddEntry }) => {
               id="manual-phase"
               value={phase}
               onChange={(e) => setPhase(e.target.value as ProjectPhase)}
-              className="w-full px-3 py-2 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink focus:border-chronos-green focus:outline-none"
+              className="w-full h-[38px] px-3 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink truncate focus:border-chronos-green focus:outline-none"
             >
               <option value="DISCOVERY_UX">UX Discovery</option>
               <option value="CUSTOM_WP_THEME">Custom WP Theme</option>
@@ -103,7 +103,7 @@ export const ManualEntryForm: React.FC<Props> = ({ projects, onAddEntry }) => {
               max="24"
               value={hours}
               onChange={(e) => setHours(e.target.value)}
-              className="w-full px-3 py-2 bg-chronos-recessed border border-white/[0.08] rounded-[10px] font-mono tabular-nums text-chronos-ink focus:border-chronos-green focus:outline-none"
+              className="w-full h-[38px] px-3 bg-chronos-recessed border border-white/[0.08] rounded-[10px] font-mono tabular-nums text-chronos-ink focus:border-chronos-green focus:outline-none"
             />
           </div>
 
@@ -117,7 +117,7 @@ export const ManualEntryForm: React.FC<Props> = ({ projects, onAddEntry }) => {
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               placeholder="Work completed..."
-              className="w-full px-3 py-2 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink placeholder-chronos-dim focus:border-chronos-green focus:outline-none"
+              className="w-full h-[38px] px-3 bg-chronos-recessed border border-white/[0.08] rounded-[10px] text-chronos-ink placeholder-chronos-dim focus:border-chronos-green focus:outline-none"
             />
           </div>
         </div>
